@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SIBEMOL - App Moderador</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .hidden { display: none !important; }
+        .pulse-red { animation: pulse 2s infinite; }
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
+            50% { box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); }
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-white h-screen flex flex-col items-center justify-center font-sans overflow-hidden">
+
+    <!-- SIMULADOR DE ESCANEO (Temporal para pruebas) -->
+    <div id="simulador-escaneo" class="p-6 text-center w-full">
+        <h2 class="text-2xl font-bold mb-4">Simular Escaneo QR</h2>
+        <div class="flex gap-2 justify-center flex-wrap">
+            <button onclick="simularQR('ROCK', 'Consagrado')" class="bg-yellow-600 hover:bg-yellow-500 py-2 px-4 rounded font-bold">Rock Consagrado</button>
+            <button onclick="simularQR('POP', 'Revelación')" class="bg-blue-600 hover:bg-blue-500 py-2 px-4 rounded font-bold">Pop Revelación</button>
+            <button onclick="simularQR('CUARTETO', 'Leyenda')" class="bg-red-900 hover:bg-red-800 py-2 px-4 rounded font-bold">Cuarteto Leyenda</button>
+        </div>
+    </div>
+
+    <!-- PANTALLA 1: ESCUCHA Y APUESTAS -->
+    <div id="pantalla-1" class="hidden bg-gray-800 p-6 rounded-2xl shadow-2xl w-11/12 max-w-sm text-center transition-all duration-300">
+        
+        <span id="ui-nivel" class="text-gray-900 px-4 py-1 rounded-full text-xs font-black uppercase tracking-widest">
+            <!-- Nivel (se llena con JS) -->
+        </span>
+        <h2 id="ui-genero" class="text-4xl font-black mt-4 mb-2 tracking-tighter">
+            <!-- Género (se llena con JS) -->
+        </h2>
+
+        <!-- Play (simulado) -->
+        <div class="my-8">
+            <button class="bg-white text-gray-900 rounded-full w-20 h-20 flex items-center justify-center mx-auto hover:scale-105 transition transform shadow-lg">
+                <svg class="w-10 h-10 ml-1" fill="currentColor" viewBox="0 0 20 20"><path d="M4 4l12 6-12 6z"></path></svg>
+            </button>
+            <p class="text-gray-400 mt-3 text-sm font-medium">10 Segundos</p>
+        </div>
+
+        <!-- Área de Pistas (Oculta por defecto) -->
+        <div id="area-pista" class="hidden bg-red-900/50 border border-red-500 rounded-lg p-3 mb-6 pulse-red">
+            <p class="text-red-400 text-xs font-bold uppercase mb-1">¡Zona de Riesgo Activada!</p>
+            <p id="ui-pista-decada" class="font-bold text-lg">Década: --</p>
+            <p id="ui-pista-nacionalidad" class="font-bold text-lg">Nacionalidad: --</p>
+        </div>
+
+        <!-- Botones -->
+        <div class="space-y-3" id="botones-apuesta">
+            <button onclick="irAVerificacion(false)" class="w-full bg-green-600 hover:bg-green-500 py-3 rounded-xl font-bold text-lg shadow-md transition">
+                ¡Lo tengo! (A Ciegas)
+                <span id="ui-premio-maximo" class="block text-xs text-green-200 font-normal mt-1">Lado B Seguro · Premio: -- Púas</span>
+            </button>
+            
+            <button id="btn-pedir-pista" onclick="mostrarPista()" class="w-full bg-orange-600 hover:bg-orange-500 py-3 rounded-xl font-bold text-lg shadow-md transition">
+                Pedir Pista
+                <span class="block text-xs text-orange-200 font-normal mt-1">Pierde 1 púa · Habilita Riesgo</span>
+            </button>
+        </div>
+        
+        <!-- Botón para avanzar si pidió pista (Oculto inicio) -->
+        <button id="btn-continuar-con-pista" onclick="irAVerificacion(true)" class="hidden w-full bg-red-600 hover:bg-red-500 py-3 mt-4 rounded-xl font-bold text-lg shadow-md transition">
+            Responder con Pista
+            <span id="ui-premio-pista" class="block text-xs text-red-200 font-normal mt-1">Premio: -- Púas</span>
+        </button>
+    </div>
+
+    <!-- PANTALLA 2: VERIFICACIÓN 3/3 -->
+    <div id="pantalla-2" class="hidden bg-gray-800 p-6 rounded-2xl shadow-2xl w-11/12 max-w-sm text-center border-4 border-gray-600">
+        <h3 class="text-xl font-bold text-gray-400 mb-6 uppercase tracking-widest">Verificación</h3>
+        
+        <div class="space-y-4 mb-8">
+            <div>
+                <p class="text-sm text-gray-400">Artista</p>
+                <p id="ui-artista" class="text-2xl font-black text-white">--</p>
+            </div>
+            <div>
+                <p class="text-sm text-gray-400">Canción</p>
+                <p id="ui-cancion" class="text-2xl font-black text-white">--</p>
+            </div>
+            <div>
+                <p class="text-sm text-gray-400">Año</p>
+                <p id="ui-ano" class="text-3xl font-black text-yellow-400">--</p>
+            </div>
+        </div>
+
+        <div class="flex space-x-3">
+            <button onclick="aciertoPerfecto()" class="flex-1 bg-green-600 hover:bg-green-500 py-3 rounded-xl font-bold shadow-md transition">
+                ¡Acierto 3/3!
+            </button>
+            <button onclick="irALadoB()" class="flex-1 bg-gray-600 hover:bg-gray-500 py-3 rounded-xl font-bold shadow-md transition">
+                Falló
+            </button>
+        </div>
+    </div>
+
+    <!-- PANTALLA 3: LADO B -->
+    <div id="pantalla-3" class="hidden bg-gradient-to-br from-yellow-600 to-yellow-800 p-6 rounded-2xl shadow-2xl w-11/12 max-w-sm text-center border-2 border-yellow-300">
+        <h3 class="text-2xl font-black text-white mb-2 tracking-tight">EL LADO B</h3>
+        
+        <!-- Estado de Riesgo -->
+        <div id="estado-riesgo" class="bg-black/30 rounded-lg p-2 mb-6">
+            <!-- Se llena con JS -->
+        </div>
+
+        <p id="ui-pregunta-ladob" class="text-lg font-medium text-yellow-50 mb-8 italic">
+            --
+        </p>
+
+        <button id="btn-revelar" onclick="revelarRespuesta()" class="w-full bg-white text-yellow-900 py-3 rounded-xl font-bold text-lg shadow-md transition hover:bg-gray-100 mb-4">
+            Revelar Respuesta
+        </button>
+
+        <div id="respuesta-lado-b" class="hidden mb-8">
+            <p class="text-sm text-yellow-200 mb-1">Respuesta:</p>
+            <p id="ui-respuesta-ladob" class="text-3xl font-black text-white">--</p>
+        </div>
+
+        <button onclick="reiniciarApp()" class="w-full bg-gray-900 hover:bg-black text-white py-3 rounded-xl font-bold shadow-md transition border border-yellow-500/50">
+            Finalizar Turno
+        </button>
+    </div>
+
+    <!-- LÓGICA DE JAVASCRIPT -->
+     <!-- Conexión a la base de datos externa -->
+    <script src="datos.js"></script>
+
+    <script>
+
+        // Ya no declaramos baseDatos aquí, porque la lee automáticamente de datos.js
+
+        // Definición de colores por género (según CDD)
+        const coloresGeneros = {
+            "ROCK": { borde: "border-yellow-500", texto: "text-yellow-400", bg: "bg-yellow-500" },
+            "POP": { borde: "border-blue-500", texto: "text-blue-400", bg: "bg-blue-500" },
+            "CUMBIA": { borde: "border-amber-700", texto: "text-amber-600", bg: "bg-amber-700" },
+            "CUARTETO": { borde: "border-red-900", texto: "text-red-800", bg: "bg-red-900" },
+            "REGGAETON": { borde: "border-purple-600", texto: "text-purple-400", bg: "bg-purple-600" },
+            "FOLKLORE": { borde: "border-orange-500", texto: "text-orange-400", bg: "bg-orange-500" },
+            "VARIADO": { borde: "border-green-500", texto: "text-green-400", bg: "bg-green-500" },
+            "INTERNACIONAL": { borde: "border-red-600", texto: "text-red-500", bg: "bg-red-600" }
+        };
+
+        // Puntos por Nivel (según CDD)
+        const puntosNivel = {
+            "Revelación": 3,
+            "Consagrado": 4,
+            "Leyenda": 5
+        };
+
+        // Variables de estado global
+        let pidioPista = false;
+        let cancionActual = null;
+        let puntosBase = 0;
+
+        // Elementos del DOM
+        const simEscaneo = document.getElementById('simulador-escaneo');
+        const p1 = document.getElementById('pantalla-1');
+        const p2 = document.getElementById('pantalla-2');
+        const p3 = document.getElementById('pantalla-3');
+        const areaPista = document.getElementById('area-pista');
+        const botonesApuesta = document.getElementById('botones-apuesta');
+        const btnContinuarPista = document.getElementById('btn-continuar-con-pista');
+        const estadoRiesgo = document.getElementById('estado-riesgo');
+        const btnRevelar = document.getElementById('btn-revelar');
+        const respuestaLadoB = document.getElementById('respuesta-lado-b');
+
+        // AL CARGAR LA PÁGINA: Leer el QR (la URL)
+        document.addEventListener("DOMContentLoaded", () => {
+            const parametros = new URLSearchParams(window.location.search);
+            const generoQR = parametros.get('g'); // Obtiene lo que dice g=...
+            const nivelQR = parametros.get('d');  // Obtiene lo que dice d=...
+            
+            if(generoQR && nivelQR) {
+                // Si la abrieron desde un QR, ocultar simulador y cargar canción
+                simEscaneo.classList.add('hidden');
+                iniciarPartida(generoQR.toUpperCase(), nivelQR);
+            } else {
+                // Si la abren normal, mostrar botones de prueba
+                simEscaneo.classList.remove('hidden');
+            }
+        });
+
+        // Función Principal para cargar la canción
+        // Función para limpiar textos (quita tildes, espacios extra y pasa a mayúsculas)
+        function limpiarTexto(texto) {
+            if(!texto) return "";
+            return texto.trim().normalize("NFD").replace(/[\u0300-\u036f]/g, "").toUpperCase();
+        }
+
+        // Función Principal para cargar la canción
+        function iniciarPartida(generoBuscado, nivelBuscado) {
+            
+            // Filtro a prueba de balas
+            const opciones = baseDatos.filter(c => 
+                limpiarTexto(c.genero) === limpiarTexto(generoBuscado) && 
+                limpiarTexto(c.nivel) === limpiarTexto(nivelBuscado)
+            );
+            
+            if(opciones.length === 0) {
+                alert(`No encontré canciones para ${generoBuscado} - ${nivelBuscado}. ¿Estás seguro que existe una canción de ese género y con ese nivel de dificultad en tu Excel?`);
+                return;
+            }
+
+            // Elegir aleatoriamente
+            const indiceAleatorio = Math.floor(Math.random() * opciones.length);
+            cancionActual = opciones[indiceAleatorio];
+
+            // Obtener colores y puntos
+
+            // Obtener colores y puntos
+            const colorData = coloresGeneros[cancionActual.genero] || { borde: "border-gray-500", texto: "text-gray-400", bg: "bg-gray-500" };
+            puntosBase = puntosNivel[cancionActual.nivel] || 3;
+
+            // Actualizar la Interfaz (Pantalla 1)
+            document.getElementById('ui-genero').textContent = cancionActual.genero;
+            document.getElementById('ui-genero').className = `text-4xl font-black mt-4 mb-2 tracking-tighter ${colorData.texto}`;
+            
+            document.getElementById('ui-nivel').innerHTML = (cancionActual.nivel === "Leyenda" ? "👑 " : (cancionActual.nivel === "Consagrado" ? "🌟 " : "⭐ ")) + cancionActual.nivel;
+            document.getElementById('ui-nivel').className = `text-gray-900 px-4 py-1 rounded-full text-xs font-black uppercase tracking-widest ${colorData.bg}`;
+
+            p1.className = `bg-gray-800 p-6 rounded-2xl shadow-2xl w-11/12 max-w-sm text-center border-4 ${colorData.borde} transition-all duration-300`;
+
+            document.getElementById('ui-premio-maximo').textContent = `Lado B Seguro · Premio: ${puntosBase} Púas` + (cancionActual.nivel === "Leyenda" ? " (¡GARDEL DIRECTO!)" : "");
+            
+            // Actualizar Pista
+            document.getElementById('ui-pista-decada').textContent = `Década: ${cancionActual.decada}`;
+            document.getElementById('ui-pista-nacionalidad').textContent = `Nacionalidad: ${cancionActual.nacionalidad}`;
+            document.getElementById('ui-premio-pista').textContent = `Premio: ${puntosBase - 1} Púas`;
+
+            // Actualizar Pantalla 2 (Verificación)
+            document.getElementById('ui-artista').textContent = cancionActual.artista;
+            document.getElementById('ui-cancion').textContent = cancionActual.cancion;
+            document.getElementById('ui-ano').textContent = cancionActual.ano;
+
+            // Actualizar Pantalla 3 (Lado B)
+            document.getElementById('ui-pregunta-ladob').textContent = `"${cancionActual.preguntaB}"`;
+            document.getElementById('ui-respuesta-ladob').textContent = cancionActual.respuestaB;
+
+            // Mostrar Pantalla 1
+            p1.classList.remove('hidden');
+        }
+
+        // --- Funciones de control (sin cambios) ---
+        function mostrarPista() {
+            pidioPista = true;
+            botonesApuesta.classList.add('hidden');
+            areaPista.classList.remove('hidden');
+            p1.className = p1.className.replace(/border-\w+-\d+/, 'border-red-600');
+            btnContinuarPista.classList.remove('hidden');
+        }
+
+        function irAVerificacion(usoPista) {
+            pidioPista = usoPista;
+            p1.classList.add('hidden');
+            p2.classList.remove('hidden');
+        }
+
+        function aciertoPerfecto() {
+            let ptsGanados = pidioPista ? (puntosBase - 1) : puntosBase;
+            let mensaje = `¡Ganó ${ptsGanados} Púas!`;
+            if(!pidioPista && puntosBase === 5) mensaje = "¡GARDEL DIRECTO!";
+            alert(mensaje + "\n\nEntregá las fichas físicas. El jugador tiene derecho a un Turno Bis.");
+            reiniciarApp();
+        }
+
+        function irALadoB() {
+            p2.classList.add('hidden');
+            p3.classList.remove('hidden');
+            if(pidioPista) {
+                estadoRiesgo.innerHTML = `<p class="text-red-300 font-bold uppercase text-sm">¡Zona de Riesgo!</p><p class="text-xs text-white">Acierto: Dar 1 Púa | Fallo: Quitar 1 Púa</p>`;
+            } else {
+                estadoRiesgo.innerHTML = `<p class="text-green-300 font-bold uppercase text-sm">Lado B Seguro</p><p class="text-xs text-white">Acierto: Dar 1 Púa | Fallo: 0 Púas</p>`;
+            }
+        }
+
+        function revelarRespuesta() {
+            btnRevelar.classList.add('hidden');
+            respuestaLadoB.classList.remove('hidden');
+        }
+
+        function reiniciarApp() {
+            // Si venimos de un QR, al finalizar pedimos escanear otra carta
+            const parametros = new URLSearchParams(window.location.search);
+            if(parametros.get('g')) {
+                alert("Turno finalizado. Escaneá la siguiente carta.");
+                // Limpia la URL para evitar recargas accidentales
+                window.location.href = window.location.pathname; 
+            } else {
+                // Modo simulador
+                pidioPista = false;
+                cancionActual = null;
+                p3.classList.add('hidden');
+                p2.classList.add('hidden');
+                p1.classList.add('hidden');
+                simEscaneo.classList.remove('hidden');
+                areaPista.classList.add('hidden');
+                botonesApuesta.classList.remove('hidden');
+                btnContinuarPista.classList.add('hidden');
+                btnRevelar.classList.remove('hidden');
+                respuestaLadoB.classList.add('hidden');
+            }
+        }
+    </script>
+</body>
+</html>

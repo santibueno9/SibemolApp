@@ -17,32 +17,34 @@
 </head>
 <body class="bg-gray-900 text-white h-screen flex flex-col items-center justify-center font-sans overflow-hidden">
 
-    <!-- SIMULADOR DE ESCANEO (Temporal para pruebas) -->
-    <div id="simulador-escaneo" class="p-6 text-center w-full">
-        <h2 class="text-2xl font-bold mb-4">Simular Escaneo QR</h2>
-        <div class="flex gap-2 justify-center flex-wrap">
-            <button onclick="simularQR('ROCK', 'Consagrado')" class="bg-yellow-600 hover:bg-yellow-500 py-2 px-4 rounded font-bold">Rock Consagrado</button>
-            <button onclick="simularQR('POP', 'Revelación')" class="bg-blue-600 hover:bg-blue-500 py-2 px-4 rounded font-bold">Pop Revelación</button>
-            <button onclick="simularQR('CUARTETO', 'Leyenda')" class="bg-red-900 hover:bg-red-800 py-2 px-4 rounded font-bold">Cuarteto Leyenda</button>
+    <!-- PANTALLA MENÚ (LOBBY ESPERANDO QR) -->
+    <div id="pantalla-menu" class="p-6 text-center w-full flex flex-col items-center justify-center h-full">
+        <h1 class="text-5xl font-black mb-2 text-yellow-500 tracking-tighter">SIBEMOL</h1>
+        <p class="text-gray-400 mb-8 text-lg">El director de orquesta</p>
+        
+        <div class="bg-gray-800 p-8 rounded-2xl border border-gray-700 shadow-xl max-w-sm w-full">
+            <svg class="w-16 h-16 mx-auto mb-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"></path></svg>
+            <p class="text-white font-bold text-xl mb-2">Mesa Lista</p>
+            <p class="text-gray-400 text-sm">Escaneá el código QR del dorso de una carta física con la cámara del celular para jugar.</p>
+        </div>
+        
+        <!-- Botones de Debugging Ocultos para que pruebes en PC -->
+        <button onclick="document.getElementById('debug-simulador').classList.toggle('hidden')" class="mt-8 text-xs text-gray-700 underline">Pruebas Manuales</button>
+        <div id="debug-simulador" class="hidden mt-4 flex gap-2 justify-center flex-wrap">
+            <button onclick="iniciarPartida('ROCK', 'Consagrado')" class="bg-yellow-600 py-1 px-3 rounded text-xs text-white">Probar ROCK</button>
+            <button onclick="iniciarPartida('CUMBIA', 'Revelacion')" class="bg-amber-700 py-1 px-3 rounded text-xs text-white">Probar CUMBIA</button>
         </div>
     </div>
 
     <!-- PANTALLA 1: ESCUCHA Y APUESTAS -->
     <div id="pantalla-1" class="hidden bg-gray-800 p-6 rounded-2xl shadow-2xl w-11/12 max-w-sm text-center transition-all duration-300">
         
-        <span id="ui-nivel" class="text-gray-900 px-4 py-1 rounded-full text-xs font-black uppercase tracking-widest">
-            <!-- Nivel (se llena con JS) -->
-        </span>
-        <h2 id="ui-genero" class="text-4xl font-black mt-4 mb-2 tracking-tighter">
-            <!-- Género (se llena con JS) -->
-        </h2>
+        <span id="ui-nivel" class="text-gray-900 px-4 py-1 rounded-full text-xs font-black uppercase tracking-widest"></span>
+        <h2 id="ui-genero" class="text-4xl font-black mt-4 mb-2 tracking-tighter"></h2>
 
-        <!-- Play (simulado) -->
-        <div class="my-8">
-            <button class="bg-white text-gray-900 rounded-full w-20 h-20 flex items-center justify-center mx-auto hover:scale-105 transition transform shadow-lg">
-                <svg class="w-10 h-10 ml-1" fill="currentColor" viewBox="0 0 20 20"><path d="M4 4l12 6-12 6z"></path></svg>
-            </button>
-            <p class="text-gray-400 mt-3 text-sm font-medium">10 Segundos</p>
+        <!-- REPRODUCTOR SPOTIFY REAL -->
+        <div class="my-6 min-h-[152px]" id="reproductor-spotify">
+            <!-- El reproductor se inyecta por JavaScript -->
         </div>
 
         <!-- Área de Pistas (Oculta por defecto) -->
@@ -56,7 +58,7 @@
         <div class="space-y-3" id="botones-apuesta">
             <button onclick="irAVerificacion(false)" class="w-full bg-green-600 hover:bg-green-500 py-3 rounded-xl font-bold text-lg shadow-md transition">
                 ¡Lo tengo! (A Ciegas)
-                <span id="ui-premio-maximo" class="block text-xs text-green-200 font-normal mt-1">Lado B Seguro · Premio: -- Púas</span>
+                <span id="ui-premio-maximo" class="block text-xs text-green-200 font-normal mt-1"></span>
             </button>
             
             <button id="btn-pedir-pista" onclick="mostrarPista()" class="w-full bg-orange-600 hover:bg-orange-500 py-3 rounded-xl font-bold text-lg shadow-md transition">
@@ -68,7 +70,7 @@
         <!-- Botón para avanzar si pidió pista (Oculto inicio) -->
         <button id="btn-continuar-con-pista" onclick="irAVerificacion(true)" class="hidden w-full bg-red-600 hover:bg-red-500 py-3 mt-4 rounded-xl font-bold text-lg shadow-md transition">
             Responder con Pista
-            <span id="ui-premio-pista" class="block text-xs text-red-200 font-normal mt-1">Premio: -- Púas</span>
+            <span id="ui-premio-pista" class="block text-xs text-red-200 font-normal mt-1"></span>
         </button>
     </div>
 
@@ -104,15 +106,8 @@
     <!-- PANTALLA 3: LADO B -->
     <div id="pantalla-3" class="hidden bg-gradient-to-br from-yellow-600 to-yellow-800 p-6 rounded-2xl shadow-2xl w-11/12 max-w-sm text-center border-2 border-yellow-300">
         <h3 class="text-2xl font-black text-white mb-2 tracking-tight">EL LADO B</h3>
-        
-        <!-- Estado de Riesgo -->
-        <div id="estado-riesgo" class="bg-black/30 rounded-lg p-2 mb-6">
-            <!-- Se llena con JS -->
-        </div>
-
-        <p id="ui-pregunta-ladob" class="text-lg font-medium text-yellow-50 mb-8 italic">
-            --
-        </p>
+        <div id="estado-riesgo" class="bg-black/30 rounded-lg p-2 mb-6"></div>
+        <p id="ui-pregunta-ladob" class="text-lg font-medium text-yellow-50 mb-8 italic">--</p>
 
         <button id="btn-revelar" onclick="revelarRespuesta()" class="w-full bg-white text-yellow-900 py-3 rounded-xl font-bold text-lg shadow-md transition hover:bg-gray-100 mb-4">
             Revelar Respuesta
@@ -124,20 +119,16 @@
         </div>
 
         <button onclick="reiniciarApp()" class="w-full bg-gray-900 hover:bg-black text-white py-3 rounded-xl font-bold shadow-md transition border border-yellow-500/50">
-            Finalizar Turno
+            Siguiente Turno
         </button>
     </div>
 
-    <!-- LÓGICA DE JAVASCRIPT -->
-     <!-- Conexión a la base de datos externa -->
+    <!-- CONEXIÓN A DATOS Y LÓGICA -->
     <script src="datos.js"></script>
-
     <script>
-
-        // Ya no declaramos baseDatos aquí, porque la lee automáticamente de datos.js
-
-        // Definición de colores por género (según CDD)
+        // Colores y Puntos
         const coloresGeneros = {
+            "ROCK": { borde: "border-yellow-500", texto: "text-yellow-400", bg: "bg-yellow-500" },
             "ROCKN": { borde: "border-yellow-500", texto: "text-yellow-400", bg: "bg-yellow-500" },
             "ROCKE": { borde: "border-yellow-500", texto: "text-yellow-400", bg: "bg-yellow-500" },
             "POP": { borde: "border-blue-500", texto: "text-blue-400", bg: "bg-blue-500" },
@@ -149,20 +140,13 @@
             "INTERNACIONAL": { borde: "border-red-600", texto: "text-red-500", bg: "bg-red-600" }
         };
 
-        // Puntos por Nivel (según CDD)
-        const puntosNivel = {
-            "Revelación": 3,
-            "Consagrado": 4,
-            "Leyenda": 5
-        };
+        const puntosNivel = { "REVELACION": 3, "CONSAGRADO": 4, "LEYENDA": 5 };
 
-        // Variables de estado global
         let pidioPista = false;
         let cancionActual = null;
         let puntosBase = 0;
 
-        // Elementos del DOM
-        const simEscaneo = document.getElementById('simulador-escaneo');
+        const pantallaMenu = document.getElementById('pantalla-menu');
         const p1 = document.getElementById('pantalla-1');
         const p2 = document.getElementById('pantalla-2');
         const p3 = document.getElementById('pantalla-3');
@@ -172,84 +156,85 @@
         const estadoRiesgo = document.getElementById('estado-riesgo');
         const btnRevelar = document.getElementById('btn-revelar');
         const respuestaLadoB = document.getElementById('respuesta-lado-b');
+        const reproductor = document.getElementById('reproductor-spotify');
 
-        // AL CARGAR LA PÁGINA: Leer el QR (la URL)
+        // Función a prueba de balas para limpiar texto (quita espacios y tildes)
+        function limpiarTexto(texto) {
+            if(!texto) return "";
+            return String(texto).trim().normalize("NFD").replace(/[\u0300-\u036f]/g, "").toUpperCase();
+        }
+
+        // Extraer el ID único de la URL de Spotify para el reproductor
+        function obtenerSpotifyID(url) {
+            if (!url) return null;
+            const match = url.match(/track\/([a-zA-Z0-9]+)/);
+            return match ? match[1] : null;
+        }
+
         document.addEventListener("DOMContentLoaded", () => {
             const parametros = new URLSearchParams(window.location.search);
-            const generoQR = parametros.get('g'); // Obtiene lo que dice g=...
-            const nivelQR = parametros.get('d');  // Obtiene lo que dice d=...
+            const generoQR = parametros.get('g'); 
+            const nivelQR = parametros.get('d');  
             
             if(generoQR && nivelQR) {
-                // Si la abrieron desde un QR, ocultar simulador y cargar canción
-                simEscaneo.classList.add('hidden');
-                iniciarPartida(generoQR.toUpperCase(), nivelQR);
+                pantallaMenu.classList.add('hidden');
+                iniciarPartida(generoQR, nivelQR);
             } else {
-                // Si la abren normal, mostrar botones de prueba
-                simEscaneo.classList.remove('hidden');
+                pantallaMenu.classList.remove('hidden');
             }
         });
 
-        // Función Principal para cargar la canción
-        // Función para limpiar textos (quita tildes, espacios extra y pasa a mayúsculas)
-        function limpiarTexto(texto) {
-            if(!texto) return "";
-            return texto.trim().normalize("NFD").replace(/[\u0300-\u036f]/g, "").toUpperCase();
-        }
-
-        // Función Principal para cargar la canción
         function iniciarPartida(generoBuscado, nivelBuscado) {
-            
-            // Filtro a prueba de balas
             const opciones = baseDatos.filter(c => 
                 limpiarTexto(c.genero) === limpiarTexto(generoBuscado) && 
                 limpiarTexto(c.nivel) === limpiarTexto(nivelBuscado)
             );
             
             if(opciones.length === 0) {
-                alert(`No encontré canciones para ${generoBuscado} - ${nivelBuscado}. ¿Estás seguro que existe una canción de ese género y con ese nivel de dificultad en tu Excel?`);
+                alert(`No encontré canciones para el filtro: ${generoBuscado} - ${nivelBuscado}`);
                 return;
             }
 
-            // Elegir aleatoriamente
-            const indiceAleatorio = Math.floor(Math.random() * opciones.length);
-            cancionActual = opciones[indiceAleatorio];
+            cancionActual = opciones[Math.floor(Math.random() * opciones.length)];
+            const generoLimpio = limpiarTexto(cancionActual.genero);
+            const colorData = coloresGeneros[generoLimpio] || coloresGeneros["VARIADO"];
+            const nivelLimpio = limpiarTexto(cancionActual.nivel);
+            puntosBase = puntosNivel[nivelLimpio] || 3;
 
-            // Obtener colores y puntos
+            // Renderizar Reproductor Spotify
+            const spotifyID = obtenerSpotifyID(cancionActual.spotify);
+            if(spotifyID) {
+                reproductor.innerHTML = `<iframe style="border-radius:12px" src="https://open.spotify.com/embed/track/${spotifyID}?utm_source=generator&theme=0" width="100%" height="152" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>`;
+            } else {
+                reproductor.innerHTML = `<div class="bg-gray-700 p-4 rounded-xl text-red-400">Audio no disponible para esta canción.</div>`;
+            }
 
-            // Obtener colores y puntos
-            const colorData = coloresGeneros[cancionActual.genero] || { borde: "border-gray-500", texto: "text-gray-400", bg: "bg-gray-500" };
-            puntosBase = puntosNivel[cancionActual.nivel] || 3;
-
-            // Actualizar la Interfaz (Pantalla 1)
             document.getElementById('ui-genero').textContent = cancionActual.genero;
             document.getElementById('ui-genero').className = `text-4xl font-black mt-4 mb-2 tracking-tighter ${colorData.texto}`;
             
-            document.getElementById('ui-nivel').innerHTML = (cancionActual.nivel === "Leyenda" ? "👑 " : (cancionActual.nivel === "Consagrado" ? "🌟 " : "⭐ ")) + cancionActual.nivel;
+            document.getElementById('ui-nivel').innerHTML = (nivelLimpio === "LEYENDA" ? "👑 " : (nivelLimpio === "CONSAGRADO" ? "🌟 " : "⭐ ")) + cancionActual.nivel;
             document.getElementById('ui-nivel').className = `text-gray-900 px-4 py-1 rounded-full text-xs font-black uppercase tracking-widest ${colorData.bg}`;
 
             p1.className = `bg-gray-800 p-6 rounded-2xl shadow-2xl w-11/12 max-w-sm text-center border-4 ${colorData.borde} transition-all duration-300`;
 
-            document.getElementById('ui-premio-maximo').textContent = `Lado B Seguro · Premio: ${puntosBase} Púas` + (cancionActual.nivel === "Leyenda" ? " (¡GARDEL DIRECTO!)" : "");
+            document.getElementById('ui-premio-maximo').textContent = `Lado B Seguro · Premio: ${puntosBase} Púas` + (nivelLimpio === "LEYENDA" ? " (¡GARDEL DIRECTO!)" : "");
             
-            // Actualizar Pista
             document.getElementById('ui-pista-decada').textContent = `Década: ${cancionActual.decada}`;
             document.getElementById('ui-pista-nacionalidad').textContent = `Nacionalidad: ${cancionActual.nacionalidad}`;
             document.getElementById('ui-premio-pista').textContent = `Premio: ${puntosBase - 1} Púas`;
 
-            // Actualizar Pantalla 2 (Verificación)
             document.getElementById('ui-artista').textContent = cancionActual.artista;
             document.getElementById('ui-cancion').textContent = cancionActual.cancion;
             document.getElementById('ui-ano').textContent = cancionActual.ano;
 
-            // Actualizar Pantalla 3 (Lado B)
             document.getElementById('ui-pregunta-ladob').textContent = `"${cancionActual.preguntaB}"`;
             document.getElementById('ui-respuesta-ladob').textContent = cancionActual.respuestaB;
 
-            // Mostrar Pantalla 1
+            // Ocultar Menú y Mostrar Pantalla 1
+            pantallaMenu.classList.add('hidden');
             p1.classList.remove('hidden');
         }
 
-        // --- Funciones de control (sin cambios) ---
         function mostrarPista() {
             pidioPista = true;
             botonesApuesta.classList.add('hidden');
@@ -262,13 +247,14 @@
             pidioPista = usoPista;
             p1.classList.add('hidden');
             p2.classList.remove('hidden');
+            reproductor.innerHTML = ''; // Detiene la música de Spotify al cambiar de pantalla
         }
 
         function aciertoPerfecto() {
             let ptsGanados = pidioPista ? (puntosBase - 1) : puntosBase;
             let mensaje = `¡Ganó ${ptsGanados} Púas!`;
             if(!pidioPista && puntosBase === 5) mensaje = "¡GARDEL DIRECTO!";
-            alert(mensaje + "\n\nEntregá las fichas físicas. El jugador tiene derecho a un Turno Bis.");
+            alert(mensaje + "\n\nEl jugador tiene derecho a un Turno Bis.");
             reiniciarApp();
         }
 
@@ -288,26 +274,8 @@
         }
 
         function reiniciarApp() {
-            // Si venimos de un QR, al finalizar pedimos escanear otra carta
-            const parametros = new URLSearchParams(window.location.search);
-            if(parametros.get('g')) {
-                alert("Turno finalizado. Escaneá la siguiente carta.");
-                // Limpia la URL para evitar recargas accidentales
-                window.location.href = window.location.pathname; 
-            } else {
-                // Modo simulador
-                pidioPista = false;
-                cancionActual = null;
-                p3.classList.add('hidden');
-                p2.classList.add('hidden');
-                p1.classList.add('hidden');
-                simEscaneo.classList.remove('hidden');
-                areaPista.classList.add('hidden');
-                botonesApuesta.classList.remove('hidden');
-                btnContinuarPista.classList.add('hidden');
-                btnRevelar.classList.remove('hidden');
-                respuestaLadoB.classList.add('hidden');
-            }
+            // Limpiamos la URL y volvemos al menú base para esperar un escaneo nuevo
+            window.location.href = window.location.pathname; 
         }
     </script>
 </body>

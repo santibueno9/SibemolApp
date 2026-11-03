@@ -3,9 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SIBEMOL - App Moderador</title>
+    <title>SIBEMOL - El Director de Orquesta</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Librería de Escáner QR -->
+    <script src="https://unpkg.com/html5-qrcode"></script>
     <style>
         .hidden { display: none !important; }
         .pulse-red { animation: pulse 2s infinite; }
@@ -17,37 +19,37 @@
 </head>
 <body class="bg-gray-900 text-white h-screen flex flex-col items-center justify-center font-sans overflow-hidden">
 
-    <!-- PANTALLA MENÚ (LOBBY ESPERANDO QR) -->
-    <div id="pantalla-menu" class="p-6 text-center w-full flex flex-col items-center justify-center h-full">
+    <!-- PANTALLA MENÚ (LOBBY - SE ABRE CON EL QR DE LA CAJA) -->
+    <div id="pantalla-menu" class="p-6 text-center w-full flex flex-col items-center justify-center h-full transition-all">
         <h1 class="text-5xl font-black mb-2 text-yellow-500 tracking-tighter">SIBEMOL</h1>
-        <p class="text-gray-400 mb-8 text-lg">El director de orquesta</p>
+        <p class="text-gray-400 mb-12 text-lg">El director de orquesta</p>
         
-        <div class="bg-gray-800 p-8 rounded-2xl border border-gray-700 shadow-xl max-w-sm w-full">
-            <svg class="w-16 h-16 mx-auto mb-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"></path></svg>
-            <p class="text-white font-bold text-xl mb-2">Mesa Lista</p>
-            <p class="text-gray-400 text-sm">Escaneá el código QR del dorso de una carta física con la cámara del celular para jugar.</p>
-        </div>
+        <button onclick="iniciarEscaner()" class="bg-yellow-500 text-gray-900 font-black text-3xl py-5 px-10 rounded-full shadow-lg hover:scale-105 transition transform shadow-yellow-500/50">
+            ¡Dale Play!
+        </button>
         
-        <!-- Botones de Debugging Ocultos para que pruebes en PC -->
-        <button onclick="document.getElementById('debug-simulador').classList.toggle('hidden')" class="mt-8 text-xs text-gray-700 underline">Pruebas Manuales</button>
-        <div id="debug-simulador" class="hidden mt-4 flex gap-2 justify-center flex-wrap">
-            <button onclick="iniciarPartida('ROCK', 'Consagrado')" class="bg-yellow-600 py-1 px-3 rounded text-xs text-white">Probar ROCK</button>
-            <button onclick="iniciarPartida('CUMBIA', 'Revelacion')" class="bg-amber-700 py-1 px-3 rounded text-xs text-white">Probar CUMBIA</button>
-        </div>
+        <p class="text-gray-500 text-sm mt-8">Apoyá el mazo en la mesa y prepará la cámara.</p>
+    </div>
+
+    <!-- PANTALLA ESCÁNER (CÁMARA EN VIVO) -->
+    <div id="pantalla-escaner" class="hidden flex-col items-center justify-center w-full h-full p-6">
+        <h2 class="text-2xl font-black text-yellow-500 mb-6 animate-pulse">Escaneá una carta...</h2>
+        
+        <!-- Contenedor del video de la cámara -->
+        <div id="reader" class="w-full max-w-sm rounded-2xl overflow-hidden border-4 border-gray-700 shadow-2xl bg-black"></div>
+        
+        <button onclick="cerrarEscaner()" class="mt-8 text-gray-400 underline text-sm">Cancelar y volver al menú</button>
     </div>
 
     <!-- PANTALLA 1: ESCUCHA Y APUESTAS -->
     <div id="pantalla-1" class="hidden bg-gray-800 p-6 rounded-2xl shadow-2xl w-11/12 max-w-sm text-center transition-all duration-300">
-        
         <span id="ui-nivel" class="text-gray-900 px-4 py-1 rounded-full text-xs font-black uppercase tracking-widest"></span>
         <h2 id="ui-genero" class="text-4xl font-black mt-4 mb-2 tracking-tighter"></h2>
 
         <!-- REPRODUCTOR SPOTIFY REAL -->
-        <div class="my-6 min-h-[152px]" id="reproductor-spotify">
-            <!-- El reproductor se inyecta por JavaScript -->
-        </div>
+        <div class="my-6 min-h-[152px]" id="reproductor-spotify"></div>
 
-        <!-- Área de Pistas (Oculta por defecto) -->
+        <!-- Área de Pistas -->
         <div id="area-pista" class="hidden bg-red-900/50 border border-red-500 rounded-lg p-3 mb-6 pulse-red">
             <p class="text-red-400 text-xs font-bold uppercase mb-1">¡Zona de Riesgo Activada!</p>
             <p id="ui-pista-decada" class="font-bold text-lg">Década: --</p>
@@ -60,14 +62,13 @@
                 ¡Lo tengo! (A Ciegas)
                 <span id="ui-premio-maximo" class="block text-xs text-green-200 font-normal mt-1"></span>
             </button>
-            
             <button id="btn-pedir-pista" onclick="mostrarPista()" class="w-full bg-orange-600 hover:bg-orange-500 py-3 rounded-xl font-bold text-lg shadow-md transition">
                 Pedir Pista
                 <span class="block text-xs text-orange-200 font-normal mt-1">Pierde 1 púa · Habilita Riesgo</span>
             </button>
         </div>
         
-        <!-- Botón para avanzar si pidió pista (Oculto inicio) -->
+        <!-- Botón para avanzar si pidió pista -->
         <button id="btn-continuar-con-pista" onclick="irAVerificacion(true)" class="hidden w-full bg-red-600 hover:bg-red-500 py-3 mt-4 rounded-xl font-bold text-lg shadow-md transition">
             Responder con Pista
             <span id="ui-premio-pista" class="block text-xs text-red-200 font-normal mt-1"></span>
@@ -77,29 +78,14 @@
     <!-- PANTALLA 2: VERIFICACIÓN 3/3 -->
     <div id="pantalla-2" class="hidden bg-gray-800 p-6 rounded-2xl shadow-2xl w-11/12 max-w-sm text-center border-4 border-gray-600">
         <h3 class="text-xl font-bold text-gray-400 mb-6 uppercase tracking-widest">Verificación</h3>
-        
         <div class="space-y-4 mb-8">
-            <div>
-                <p class="text-sm text-gray-400">Artista</p>
-                <p id="ui-artista" class="text-2xl font-black text-white">--</p>
-            </div>
-            <div>
-                <p class="text-sm text-gray-400">Canción</p>
-                <p id="ui-cancion" class="text-2xl font-black text-white">--</p>
-            </div>
-            <div>
-                <p class="text-sm text-gray-400">Año</p>
-                <p id="ui-ano" class="text-3xl font-black text-yellow-400">--</p>
-            </div>
+            <div><p class="text-sm text-gray-400">Artista</p><p id="ui-artista" class="text-2xl font-black text-white">--</p></div>
+            <div><p class="text-sm text-gray-400">Canción</p><p id="ui-cancion" class="text-2xl font-black text-white">--</p></div>
+            <div><p class="text-sm text-gray-400">Año</p><p id="ui-ano" class="text-3xl font-black text-yellow-400">--</p></div>
         </div>
-
         <div class="flex space-x-3">
-            <button onclick="aciertoPerfecto()" class="flex-1 bg-green-600 hover:bg-green-500 py-3 rounded-xl font-bold shadow-md transition">
-                ¡Acierto 3/3!
-            </button>
-            <button onclick="irALadoB()" class="flex-1 bg-gray-600 hover:bg-gray-500 py-3 rounded-xl font-bold shadow-md transition">
-                Falló
-            </button>
+            <button onclick="aciertoPerfecto()" class="flex-1 bg-green-600 hover:bg-green-500 py-3 rounded-xl font-bold shadow-md transition">¡Acierto 3/3!</button>
+            <button onclick="irALadoB()" class="flex-1 bg-gray-600 hover:bg-gray-500 py-3 rounded-xl font-bold shadow-md transition">Falló</button>
         </div>
     </div>
 
@@ -112,14 +98,14 @@
         <button id="btn-revelar" onclick="revelarRespuesta()" class="w-full bg-white text-yellow-900 py-3 rounded-xl font-bold text-lg shadow-md transition hover:bg-gray-100 mb-4">
             Revelar Respuesta
         </button>
-
         <div id="respuesta-lado-b" class="hidden mb-8">
             <p class="text-sm text-yellow-200 mb-1">Respuesta:</p>
             <p id="ui-respuesta-ladob" class="text-3xl font-black text-white">--</p>
         </div>
-
-        <button onclick="reiniciarApp()" class="w-full bg-gray-900 hover:bg-black text-white py-3 rounded-xl font-bold shadow-md transition border border-yellow-500/50">
-            Siguiente Turno
+        
+        <!-- EL BOTÓN QUE REINICIA EL CICLO CONTINUO -->
+        <button onclick="abrirSiguienteCarta()" class="w-full bg-gray-900 hover:bg-black text-white py-3 rounded-xl font-bold shadow-md transition border border-yellow-500/50">
+            Siguiente Canción 📷
         </button>
     </div>
 
@@ -139,14 +125,15 @@
             "VARIADO": { borde: "border-green-500", texto: "text-green-400", bg: "bg-green-500" },
             "INTERNACIONAL": { borde: "border-red-600", texto: "text-red-500", bg: "bg-red-600" }
         };
-
         const puntosNivel = { "REVELACION": 3, "CONSAGRADO": 4, "LEYENDA": 5 };
 
         let pidioPista = false;
         let cancionActual = null;
         let puntosBase = 0;
+        let escanerActivo = null;
 
         const pantallaMenu = document.getElementById('pantalla-menu');
+        const pantallaEscaner = document.getElementById('pantalla-escaner');
         const p1 = document.getElementById('pantalla-1');
         const p2 = document.getElementById('pantalla-2');
         const p3 = document.getElementById('pantalla-3');
@@ -158,32 +145,76 @@
         const respuestaLadoB = document.getElementById('respuesta-lado-b');
         const reproductor = document.getElementById('reproductor-spotify');
 
-        // Función a prueba de balas para limpiar texto (quita espacios y tildes)
         function limpiarTexto(texto) {
             if(!texto) return "";
             return String(texto).trim().normalize("NFD").replace(/[\u0300-\u036f]/g, "").toUpperCase();
         }
 
-        // Extraer el ID único de la URL de Spotify para el reproductor
         function obtenerSpotifyID(url) {
             if (!url) return null;
             const match = url.match(/track\/([a-zA-Z0-9]+)/);
             return match ? match[1] : null;
         }
 
+        // Leer URL por si alguien escanea con la cámara nativa del celular por accidente
         document.addEventListener("DOMContentLoaded", () => {
             const parametros = new URLSearchParams(window.location.search);
             const generoQR = parametros.get('g'); 
             const nivelQR = parametros.get('d');  
-            
             if(generoQR && nivelQR) {
                 pantallaMenu.classList.add('hidden');
                 iniciarPartida(generoQR, nivelQR);
-            } else {
-                pantallaMenu.classList.remove('hidden');
             }
         });
 
+        // --- LÓGICA DE LA CÁMARA INTERNA ---
+        function iniciarEscaner() {
+            pantallaMenu.classList.add('hidden');
+            pantallaEscaner.classList.remove('hidden');
+            
+            // Instancia el escáner si no existe
+            if (!escanerActivo) {
+                escanerActivo = new Html5Qrcode("reader");
+            }
+            
+            escanerActivo.start(
+                { facingMode: "environment" }, // Usa la cámara trasera
+                { fps: 10, qrbox: { width: 250, height: 250 } },
+                (textoEscaneado) => {
+                    // Cuando lee un QR exitosamente
+                    try {
+                        const urlData = new URL(textoEscaneado);
+                        const generoEscaneado = urlData.searchParams.get('g');
+                        const nivelEscaneado = urlData.searchParams.get('d');
+                        
+                        if(generoEscaneado && nivelEscaneado) {
+                            // Apaga la cámara para ahorrar batería y carga la canción
+                            cerrarEscanerSolo();
+                            iniciarPartida(generoEscaneado, nivelEscaneado);
+                        }
+                    } catch(e) {
+                        alert("El código QR no pertenece a SIBEMOL.");
+                    }
+                }
+            ).catch(err => {
+                alert("Para usar el escáner interno, debes aceptar los permisos de la cámara del navegador.");
+                cerrarEscaner();
+            });
+        }
+
+        function cerrarEscanerSolo() {
+            if(escanerActivo && escanerActivo.isScanning) {
+                escanerActivo.stop();
+            }
+            pantallaEscaner.classList.add('hidden');
+        }
+
+        function cerrarEscaner() {
+            cerrarEscanerSolo();
+            pantallaMenu.classList.remove('hidden');
+        }
+
+        // --- LÓGICA DEL JUEGO ---
         function iniciarPartida(generoBuscado, nivelBuscado) {
             const opciones = baseDatos.filter(c => 
                 limpiarTexto(c.genero) === limpiarTexto(generoBuscado) && 
@@ -192,6 +223,7 @@
             
             if(opciones.length === 0) {
                 alert(`No encontré canciones para el filtro: ${generoBuscado} - ${nivelBuscado}`);
+                pantallaMenu.classList.remove('hidden');
                 return;
             }
 
@@ -201,7 +233,6 @@
             const nivelLimpio = limpiarTexto(cancionActual.nivel);
             puntosBase = puntosNivel[nivelLimpio] || 3;
 
-            // Renderizar Reproductor Spotify
             const spotifyID = obtenerSpotifyID(cancionActual.spotify);
             if(spotifyID) {
                 reproductor.innerHTML = `<iframe style="border-radius:12px" src="https://open.spotify.com/embed/track/${spotifyID}?utm_source=generator&theme=0" width="100%" height="152" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>`;
@@ -211,27 +242,19 @@
 
             document.getElementById('ui-genero').textContent = cancionActual.genero;
             document.getElementById('ui-genero').className = `text-4xl font-black mt-4 mb-2 tracking-tighter ${colorData.texto}`;
-            
             document.getElementById('ui-nivel').innerHTML = (nivelLimpio === "LEYENDA" ? "👑 " : (nivelLimpio === "CONSAGRADO" ? "🌟 " : "⭐ ")) + cancionActual.nivel;
             document.getElementById('ui-nivel').className = `text-gray-900 px-4 py-1 rounded-full text-xs font-black uppercase tracking-widest ${colorData.bg}`;
-
             p1.className = `bg-gray-800 p-6 rounded-2xl shadow-2xl w-11/12 max-w-sm text-center border-4 ${colorData.borde} transition-all duration-300`;
-
             document.getElementById('ui-premio-maximo').textContent = `Lado B Seguro · Premio: ${puntosBase} Púas` + (nivelLimpio === "LEYENDA" ? " (¡GARDEL DIRECTO!)" : "");
-            
             document.getElementById('ui-pista-decada').textContent = `Década: ${cancionActual.decada}`;
             document.getElementById('ui-pista-nacionalidad').textContent = `Nacionalidad: ${cancionActual.nacionalidad}`;
             document.getElementById('ui-premio-pista').textContent = `Premio: ${puntosBase - 1} Púas`;
-
             document.getElementById('ui-artista').textContent = cancionActual.artista;
             document.getElementById('ui-cancion').textContent = cancionActual.cancion;
             document.getElementById('ui-ano').textContent = cancionActual.ano;
-
             document.getElementById('ui-pregunta-ladob').textContent = `"${cancionActual.preguntaB}"`;
             document.getElementById('ui-respuesta-ladob').textContent = cancionActual.respuestaB;
 
-            // Ocultar Menú y Mostrar Pantalla 1
-            pantallaMenu.classList.add('hidden');
             p1.classList.remove('hidden');
         }
 
@@ -247,15 +270,15 @@
             pidioPista = usoPista;
             p1.classList.add('hidden');
             p2.classList.remove('hidden');
-            reproductor.innerHTML = ''; // Detiene la música de Spotify al cambiar de pantalla
+            reproductor.innerHTML = ''; 
         }
 
         function aciertoPerfecto() {
             let ptsGanados = pidioPista ? (puntosBase - 1) : puntosBase;
             let mensaje = `¡Ganó ${ptsGanados} Púas!`;
             if(!pidioPista && puntosBase === 5) mensaje = "¡GARDEL DIRECTO!";
-            alert(mensaje + "\n\nEl jugador tiene derecho a un Turno Bis.");
-            reiniciarApp();
+            alert(mensaje + "\n\nEntregá los puntos. El jugador tiene derecho a un Turno Bis.");
+            abrirSiguienteCarta();
         }
 
         function irALadoB() {
@@ -273,9 +296,25 @@
             respuestaLadoB.classList.remove('hidden');
         }
 
-        function reiniciarApp() {
-            // Limpiamos la URL y volvemos al menú base para esperar un escaneo nuevo
-            window.location.href = window.location.pathname; 
+        function abrirSiguienteCarta() {
+            // Limpia la pantalla y abre el escáner directamente para el ciclo continuo
+            pidioPista = false;
+            p3.classList.add('hidden');
+            p2.classList.add('hidden');
+            p1.classList.add('hidden');
+            
+            areaPista.classList.add('hidden');
+            botonesApuesta.classList.remove('hidden');
+            btnContinuarPista.classList.add('hidden');
+            btnRevelar.classList.remove('hidden');
+            respuestaLadoB.classList.add('hidden');
+            
+            // Si hay parámetros en la URL (alguien entró usando cámara externa), los limpiamos
+            if(window.location.search) {
+                window.history.replaceState({}, document.title, window.location.pathname);
+            }
+            
+            iniciarEscaner();
         }
     </script>
 </body>

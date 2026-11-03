@@ -38,13 +38,15 @@
         <button onclick="cerrarEscaner()" class="mt-8 text-gray-400 underline text-sm">Cancelar y volver al menú</button>
     </div>
 
+    <!-- REPRODUCTOR FLOTANTE (Se mantiene visible en todas las pantallas del turno) -->
+    <div id="reproductor-global" class="hidden w-11/12 max-w-sm mb-4 transition-all duration-300">
+        <div id="reproductor-spotify" class="min-h-[152px]"></div>
+    </div>
+
     <!-- PANTALLA 1: ESCUCHA Y APUESTAS -->
     <div id="pantalla-1" class="hidden bg-gray-800 p-6 rounded-2xl shadow-2xl w-11/12 max-w-sm text-center transition-all duration-300">
         <span id="ui-nivel" class="text-gray-900 px-4 py-1 rounded-full text-xs font-black uppercase tracking-widest"></span>
-        <h2 id="ui-genero" class="text-4xl font-black mt-4 mb-2 tracking-tighter"></h2>
-
-        <!-- REPRODUCTOR SPOTIFY -->
-        <div class="my-6 min-h-[152px]" id="reproductor-spotify"></div>
+        <h2 id="ui-genero" class="text-4xl font-black mt-4 mb-6 tracking-tighter"></h2>
 
         <!-- Área de Pistas -->
         <div id="area-pista" class="hidden bg-red-900/50 border border-red-500 rounded-lg p-3 mb-6 pulse-red">
@@ -99,7 +101,8 @@
             <p id="ui-respuesta-ladob" class="text-3xl font-black text-white">--</p>
         </div>
         
-        <button onclick="abrirSiguienteCarta()" class="w-full bg-gray-900 hover:bg-black text-white py-3 rounded-xl font-bold shadow-md transition border border-yellow-500/50">
+        <!-- Este botón ahora arranca oculto -->
+        <button id="btn-siguiente-turno" onclick="abrirSiguienteCarta()" class="hidden w-full bg-gray-900 hover:bg-black text-white py-3 rounded-xl font-bold shadow-md transition border border-yellow-500/50">
             Siguiente Canción 📷
         </button>
     </div>
@@ -142,6 +145,7 @@
 
         const pantallaMenu = document.getElementById('pantalla-menu');
         const pantallaEscaner = document.getElementById('pantalla-escaner');
+        const reproductorGlobal = document.getElementById('reproductor-global');
         const p1 = document.getElementById('pantalla-1');
         const p2 = document.getElementById('pantalla-2');
         const p3 = document.getElementById('pantalla-3');
@@ -158,7 +162,6 @@
             return match ? match[1] : null;
         }
 
-        // LÓGICA DE INICIO Y URL
         document.addEventListener("DOMContentLoaded", () => {
             const parametros = new URLSearchParams(window.location.search);
             const generoQR = parametros.get('g'); 
@@ -170,7 +173,6 @@
             }
         });
 
-        // LÓGICA DE LA CÁMARA
         function iniciarEscaner() {
             pantallaMenu.classList.add('hidden');
             pantallaEscaner.classList.remove('hidden');
@@ -214,7 +216,6 @@
             pantallaMenu.classList.remove('hidden');
         }
 
-        // LÓGICA DEL JUEGO Y MEMORIA
         function iniciarPartida(generoBuscado, nivelBuscado) {
             let jugadas = JSON.parse(sessionStorage.getItem('cancionesJugadas')) || [];
             
@@ -244,7 +245,6 @@
             }
 
             cancionActual = opcionesDisponibles[Math.floor(Math.random() * opcionesDisponibles.length)];
-            
             jugadas.push(cancionActual.id);
             sessionStorage.setItem('cancionesJugadas', JSON.stringify(jugadas));
 
@@ -261,7 +261,7 @@
             }
 
             document.getElementById('ui-genero').textContent = cancionActual.genero;
-            document.getElementById('ui-genero').className = `text-4xl font-black mt-4 mb-2 tracking-tighter ${colorData.texto}`;
+            document.getElementById('ui-genero').className = `text-4xl font-black mt-4 mb-6 tracking-tighter ${colorData.texto}`;
             document.getElementById('ui-nivel').innerHTML = (nivelLimpio === "LEYENDA" ? "👑 " : (nivelLimpio === "CONSAGRADO" ? "🌟 " : "⭐ ")) + cancionActual.nivel;
             document.getElementById('ui-nivel').className = `text-gray-900 px-4 py-1 rounded-full text-xs font-black uppercase tracking-widest ${colorData.bg}`;
             p1.className = `bg-gray-800 p-6 rounded-2xl shadow-2xl w-11/12 max-w-sm text-center border-4 ${colorData.borde} transition-all duration-300`;
@@ -275,10 +275,11 @@
             document.getElementById('ui-pregunta-ladob').textContent = `"${cancionActual.preguntaB}"`;
             document.getElementById('ui-respuesta-ladob').textContent = cancionActual.respuestaB;
 
+            // Mostramos el reproductor y la pantalla 1
+            reproductorGlobal.classList.remove('hidden');
             p1.classList.remove('hidden');
         }
 
-        // FLUJO DE INTERFAZ
         function mostrarPista() {
             pidioPista = true;
             document.getElementById('botones-apuesta').classList.add('hidden');
@@ -291,7 +292,7 @@
             pidioPista = usoPista;
             p1.classList.add('hidden');
             p2.classList.remove('hidden');
-            reproductor.innerHTML = ''; 
+            // Ya no borramos el HTML del reproductor, para que siga sonando la música
         }
 
         function aciertoPerfecto() {
@@ -322,6 +323,8 @@
         function revelarRespuesta() {
             document.getElementById('btn-revelar').classList.add('hidden');
             document.getElementById('respuesta-lado-b').classList.remove('hidden');
+            // Recién acá aparece el botón para avanzar
+            document.getElementById('btn-siguiente-turno').classList.remove('hidden');
         }
 
         function abrirSiguienteCarta() {
@@ -330,11 +333,16 @@
             p2.classList.add('hidden');
             p1.classList.add('hidden');
             
+            // Ocultamos el reproductor y cortamos la música ahora sí
+            reproductorGlobal.classList.add('hidden');
+            reproductor.innerHTML = '';
+            
             document.getElementById('area-pista').classList.add('hidden');
             document.getElementById('botones-apuesta').classList.remove('hidden');
             document.getElementById('btn-continuar-con-pista').classList.add('hidden');
             document.getElementById('btn-revelar').classList.remove('hidden');
             document.getElementById('respuesta-lado-b').classList.add('hidden');
+            document.getElementById('btn-siguiente-turno').classList.add('hidden');
             
             if(window.location.search) {
                 window.history.replaceState({}, document.title, window.location.pathname);

@@ -1,6 +1,7 @@
 const baseDatos = [
 
 
+
 { id: "ROC-001-01", genero: "RockN", nivel: "REVELACIÓN", artista: `Soda Stereo`, cancion: `Cuando Pase el Temblor`, ano: 1985, decada: "80s", nacionalidad: "Argentina", preguntaB: `¿En qué álbum de 1985 de Soda Stereo que consolidó el sonido de la banda en toda Latinoamérica está incluido este tema con aires andinos?`, respuestaB: `Nada personal`, spotify: "https://open.spotify.com/intl-es/track/3uMYq07Kj5m564OQwdSCrD?si=aa59aa8a7f62491f" },
 { id: "ROC-001-02", genero: "RockN", nivel: "CONSAGRADO", artista: `Soda Stereo`, cancion: `Prófugos`, ano: 1986, decada: "80s", nacionalidad: "Argentina", preguntaB: `¿Cuál es el nombre del tercer disco de estudio de Soda Stereo (1986) donde sale esta canción y que lleva el nombre de una famosa frase urbana?`, respuestaB: `Signos`, spotify: "https://open.spotify.com/intl-es/track/1Bov4bMY1IgfOrvUWWbhSe?si=e9d0d8f02d824cc9" },
 { id: "ROC-001-03", genero: "RockN", nivel: "REVELACIÓN", artista: `Soda Stereo`, cancion: `Persiana Americana`, ano: 1986, decada: "80s", nacionalidad: "Argentina", preguntaB: `´Tus ropas caen lentamente...´. ¿Cómo continúa la frase del estribillo de este clásico absoluto de las radios?`, respuestaB: `´Soy un espía un espectador´`, spotify: "https://open.spotify.com/intl-es/track/4iPA2yB8bK7T770EkkOi7s?si=60c5ab1552b647cb" },
@@ -770,7 +771,7 @@ const baseDatos = [
 { id: "CUA-001-01", genero: "Cuarteto", nivel: "REVELACIÓN", artista: `Carlos ´La Mona´ Jiménez`, cancion: `Quien se ha tomado todo el vino`, ano: 1986, decada: "80s", nacionalidad: "Argentina", preguntaB: `Durante sus shows, La Mona realiza un complejo lenguaje de señas con sus manos. ¿Qué está nombrando al hacerlas?`, respuestaB: `Los barrios (de sus fanáticos)`, spotify: "https://open.spotify.com/intl-es/track/2aYDWBSAEF4APCse6U2Qph?si=a67d505ee790470c" },
 { id: "CUA-001-02", genero: "Cuarteto", nivel: "REVELACIÓN", artista: `Carlos ´La Mona´ Jiménez`, cancion: `Beso a Beso`, ano: 1998, decada: "90s", nacionalidad: "Argentina", preguntaB: `A los 15 años de edad, Jiménez debutó cantando en una histórica banda pionera del género. ¿Cuál era?`, respuestaB: `Cuarteto Berna`, spotify: "https://open.spotify.com/intl-es/track/0vV3UvotpuHNC3mmKbUpSS?si=e2eef1d528cf45cc" },
 { id: "CUA-001-03", genero: "Cuarteto", nivel: "CONSAGRADO", artista: `Carlos ´La Mona´ Jiménez`, cancion: `El Federal`, ano: 1998, decada: "90s", nacionalidad: "Argentina", preguntaB: `Luego del Cuarteto Berna, ¿qué mítica agrupación lideró junto a su tío (Coquito Ramaló) antes de ser solista?`, respuestaB: `Cuarteto de Oro`, spotify: "https://open.spotify.com/intl-es/track/1tEX6vvG3xgAwMDuzPQHsZ?si=6b5cb18183b7457b" },
-{ id: "CUA-001-04", genero: "Cuarteto", nivel: "CONSAGRADO", artista: `Carlos ´La Mona´ Jiménez`, cancion: `Muchacho de Barrio`, ano: 1986, decada: "80s", nacionalidad: "Argentina", preguntaB: `A La Mona se lo asocia con el armado de una mezcla alcohólica en botella de plástico cortada. ¿Qué mezcla?`, respuestaB: `Prittiado`, spotify: "https://open.spotify.com/intl-es/track/5rrWwfITmyrdM5oDe9XPF0?si=c6f6edc863a04792" },
+{ id: "CUA-001-04", genero: "Cuarteto", nivel: "LEYENDA", artista: `Carlos ´La Mona´ Jiménez`, cancion: `Muchacho de Barrio`, ano: 1986, decada: "80s", nacionalidad: "Argentina", preguntaB: `A La Mona se lo asocia con el armado de una mezcla alcohólica en botella de plástico cortada. ¿Qué mezcla?`, respuestaB: `Prittiado`, spotify: "https://open.spotify.com/intl-es/track/5rrWwfITmyrdM5oDe9XPF0?si=c6f6edc863a04792" },
 { id: "CUA-001-05", genero: "Cuarteto", nivel: "REVELACIÓN", artista: `Carlos ´La Mona´ Jiménez`, cancion: `Ramito de Violetas`, ano: 1999, decada: "90s", nacionalidad: "Argentina", preguntaB: `Este inmenso clásico es en realidad un cover de una balada de 1974. ¿De quien es originalmente?`, respuestaB: `Cecilia`, spotify: "https://open.spotify.com/intl-es/track/4sVEoWwh0kjipzZ9UGvSz9?si=1dd8fc37bc0f47a3" },
 { id: "CUA-002-01", genero: "Cuarteto", nivel: "REVELACIÓN", artista: `Rodrigo Bueno`, cancion: `La Mano de Dios`, ano: 2000, decada: "00s", nacionalidad: "Argentina", preguntaB: `¿A qué legendario deportista y máximo ídolo popular argentino rinde homenaje exclusivo esta canción?`, respuestaB: `Diego Armando Maradona`, spotify: "https://open.spotify.com/intl-es/track/1IRqkju5P1IF9nh7NQyjVJ?si=c67365ea38c6487a" },
 { id: "CUA-002-02", genero: "Cuarteto", nivel: "REVELACIÓN", artista: `Rodrigo Bueno`, cancion: `Soy Cordobés`, ano: 1999, decada: "90s", nacionalidad: "Argentina", preguntaB: `¿Qué particular, estridente y llamativo color de pelo (muy imitado por sus fans) usó en el pico máximo de su carrera?`, respuestaB: `Celeste (Azul claro)`, spotify: "https://open.spotify.com/intl-es/track/5wG4J1UECH0c42YhMhSkcS?si=fa17f81ef6924ec2" },
@@ -781,20 +782,20 @@ const baseDatos = [
 { id: "CUA-003-02", genero: "Cuarteto", nivel: "REVELACIÓN", artista: `Walter Olmos`, cancion: `Soy un adicto a ti`, ano: 2000, decada: "00s", nacionalidad: "Argentina", preguntaB: `A diferencia de casi la totalidad de los cuarteteros exitosos, ¿de qué provincia del norte argentino era originario Walter Olmos?`, respuestaB: `Catamarca`, spotify: "https://open.spotify.com/track/0UQxsEceJ7ZF8DUnvodqzv" },
 { id: "CUA-003-03", genero: "Cuarteto", nivel: "CONSAGRADO", artista: `Walter Olmos`, cancion: `No me mientas`, ano: 2000, decada: "00s", nacionalidad: "Argentina", preguntaB: `¿De qué forma ocurrió su trágica muerte?`, respuestaB: `Jugando a la Ruleta Rusa`, spotify: "https://open.spotify.com/track/0mYPt9hLmZZvqWAbR9SdNj" },
 { id: "CUA-004-01", genero: "Cuarteto", nivel: "REVELACIÓN", artista: `La Barra`, cancion: `Amor infiel`, ano: 1997, decada: "90s", nacionalidad: "Argentina", preguntaB: `¿Cómo se llama el histórico y queridísimo cantante que lidera ´La Barra´, conocido popularmente como ´La Pepa´?`, respuestaB: `Javier Brizuela`, spotify: "https://open.spotify.com/track/4a1ZRjPOpkK3iLwIlpQKU4" },
-{ id: "CUA-004-02", genero: "Cuarteto", nivel: "CONSAGRADO", artista: `La Barra`, cancion: `La carta`, ano: 1995, decada: "90s", nacionalidad: "Argentina", preguntaB: `Antes de co-fundar La Barra, ´La Pepa´ Brizuela fue la voz principal de otra mítica agrupación (la universidad del cuarteto). ¿Cuál?`, respuestaB: `Trulalá`, spotify: "https://open.spotify.com/track/4To77u6auzmHuHuVhgNShg" },
+{ id: "CUA-004-02", genero: "Cuarteto", nivel: "LEYENDA", artista: `La Barra`, cancion: `La carta`, ano: 1995, decada: "90s", nacionalidad: "Argentina", preguntaB: `Antes de co-fundar La Barra, ´La Pepa´ Brizuela fue la voz principal de otra mítica agrupación (la universidad del cuarteto). ¿Cuál?`, respuestaB: `Trulalá`, spotify: "https://open.spotify.com/track/4To77u6auzmHuHuVhgNShg" },
 { id: "CUA-004-03", genero: "Cuarteto", nivel: "REVELACIÓN", artista: `La Barra`, cancion: `Cachetada`, ano: 2000, decada: "00s", nacionalidad: "Argentina", preguntaB: `En su reconocido album de 11 Años grabado en Vivo, ¿en qué Provincia Argentina fue?`, respuestaB: `Córdoba`, spotify: "https://open.spotify.com/track/4uJlF0urJVXUKsrkbU8nKn" },
 { id: "CUA-004-04", genero: "Cuarteto", nivel: "CONSAGRADO", artista: `La Barra`, cancion: `Un millón de rosas`, ano: 2011, decada: "10s", nacionalidad: "Argentina", preguntaB: `En 1999, La Barra marcó un hito histórico al ser la primera banda de cuarteto en realizar una gira exitosa por ¿qué país?`, respuestaB: `España`, spotify: "https://open.spotify.com/track/5VOTzbVYsUtSYZA3jWV3D4" },
 { id: "CUA-005-01", genero: "Cuarteto", nivel: "REVELACIÓN", artista: `Banda XXI`, cancion: `Olvídala`, ano: 2001, decada: "00s", nacionalidad: "Argentina", preguntaB: `A diferencia de los grupos de la capital, Banda XXI es el orgullo de otra gran e importante ciudad del sur cordobés. ¿De cuál?`, respuestaB: `Río Cuarto`, spotify: "https://open.spotify.com/track/1l3xyA0rIKdin3AKyDyVDj" },
 { id: "CUA-005-02", genero: "Cuarteto", nivel: "REVELACIÓN", artista: `Banda XXI`, cancion: `Qué bonito`, ano: 2007, decada: "00s", nacionalidad: "Argentina", preguntaB: `¿Qué histórico solista de la movida tropical (intérprete de ´En septiembre tú fuiste mía´) fue el creador y productor de la banda?`, respuestaB: `Miguel ´Conejito´ Alejandro`, spotify: "https://open.spotify.com/track/3y4pf1iwp2L86I5ZuUOUr9" },
-{ id: "CUA-005-03", genero: "Cuarteto", nivel: "REVELACIÓN", artista: `Banda XXI`, cancion: `Te pido perdón`, ano: 2013, decada: "10s", nacionalidad: "Argentina", preguntaB: `Para lograr su inconfundible y caribeño sonido ´acuartetado´, Banda XXI fusiona su ritmo fuertemente con ¿qué género dominicano?`, respuestaB: `El merengue`, spotify: "https://open.spotify.com/track/1YyQ6i603y0FFQGmBNNPBn" },
+{ id: "CUA-005-03", genero: "Cuarteto", nivel: "LEYENDA", artista: `Banda XXI`, cancion: `Te pido perdón`, ano: 2013, decada: "10s", nacionalidad: "Argentina", preguntaB: `Para lograr su inconfundible y caribeño sonido ´acuartetado´, Banda XXI fusiona su ritmo fuertemente con ¿qué género dominicano?`, respuestaB: `El merengue`, spotify: "https://open.spotify.com/track/1YyQ6i603y0FFQGmBNNPBn" },
 { id: "CUA-005-04", genero: "Cuarteto", nivel: "CONSAGRADO", artista: `Banda XXI`, cancion: `Chica sexy`, ano: 2007, decada: "00s", nacionalidad: "Argentina", preguntaB: `Entre sus ex cantantes, se encuentra un querido artista que luego fue líder de otra banda. ¿De quién hablamos?`, respuestaB: `Wally Mercado (o Yuthiel)`, spotify: "https://open.spotify.com/track/0GlH4WrnDxgxH2z61NR3j3" },
 { id: "CUA-006-01", genero: "Cuarteto", nivel: "REVELACIÓN", artista: `Sabroso`, cancion: `Año tras año`, ano: 2004, decada: "00s", nacionalidad: "Argentina", preguntaB: `¿Cómo se llama el cantante principal histórico, dueño de una voz potente inconfundible, que lideró la época dorada de Sabroso?`, respuestaB: `Wally Mercado`, spotify: "https://open.spotify.com/track/0m9dxnxcHfFN2ue3HaF6Cr" },
 { id: "CUA-006-02", genero: "Cuarteto", nivel: "CONSAGRADO", artista: `Sabroso`, cancion: `Bella idiota`, ano: 2004, decada: "00s", nacionalidad: "Argentina", preguntaB: `Esta canción es una magistral versión en español de un tema italiano (´Bella stronza´). ¿Quién es el cantautor europeo original?`, respuestaB: `Marco Masini`, spotify: "https://open.spotify.com/track/50nxv0F8ZSlyCmaT2bAEAU" },
 { id: "CUA-006-03", genero: "Cuarteto", nivel: "REVELACIÓN", artista: `Sabroso`, cancion: `Si esta casa hablara`, ano: 2007, decada: "00s", nacionalidad: "Argentina", preguntaB: `Durante su apogeo, la banda tenía una mítica dupla de cantantes frontales. ¿Quién acompañaba a Wally en los grandes éxitos?`, respuestaB: `Lisandro Márquez`, spotify: "https://open.spotify.com/track/4mUFyhnI2mGdLKtHLQaaqB" },
 { id: "CUA-006-04", genero: "Cuarteto", nivel: "CONSAGRADO", artista: `Sabroso`, cancion: `De qué te vale`, ano: 2008, decada: "00s", nacionalidad: "Argentina", preguntaB: `A nivel discográfico, Sabroso marcó una época lanzando proyectos muy extensos. En lugar de un solo CD, ¿qué solían publicar?`, respuestaB: `Discos dobles (o triples / CD+DVD)`, spotify: "https://open.spotify.com/track/7cSyls80yFNu1favoprEiv" },
 { id: "CUA-007-01", genero: "Cuarteto", nivel: "REVELACIÓN", artista: `Ulises Bueno`, cancion: `Intento`, ano: 2015, decada: "10s", nacionalidad: "Argentina", preguntaB: `¿Qué estrecha relación familiar unía a Ulises con la megaestrella del cuarteto Rodrigo ´El Potro´ Bueno?`, respuestaB: `Son hermanos`, spotify: "https://open.spotify.com/track/4jycbkcVlL5P7W2zGYcau0" },
-{ id: "CUA-007-02", genero: "Cuarteto", nivel: "CONSAGRADO", artista: `Ulises Bueno`, cancion: `Las alas de mi amante`, ano: 2016, decada: "10s", nacionalidad: "Argentina", preguntaB: `Como una marca estética fuertísima, Ulises tiene una particular característica en casi todo su cuerpo y rostro. ¿Qué es?`, respuestaB: `Está completamente tatuado`, spotify: "https://open.spotify.com/track/5moYOT87jABJDot0VZiJEl" },
-{ id: "CUA-007-03", genero: "Cuarteto", nivel: "REVELACIÓN", artista: `Ulises Bueno`, cancion: `Infiel`, ano: 2017, decada: "10s", nacionalidad: "Argentina", preguntaB: `¿Qué simbolo religioso adorna su microfono, que utiiza en todos sus shows?`, respuestaB: `Cruz`, spotify: "https://open.spotify.com/track/39qqJRcvRDFjW5S7kyDHoD" },
+{ id: "CUA-007-02", genero: "Cuarteto", nivel: "LEYENDA", artista: `Ulises Bueno`, cancion: `Las alas de mi amante`, ano: 2016, decada: "10s", nacionalidad: "Argentina", preguntaB: `Como una marca estética fuertísima, Ulises tiene una particular característica en casi todo su cuerpo y rostro. ¿Qué es?`, respuestaB: `Está completamente tatuado`, spotify: "https://open.spotify.com/track/5moYOT87jABJDot0VZiJEl" },
+{ id: "CUA-007-03", genero: "Cuarteto", nivel: "CONSAGRADO", artista: `Ulises Bueno`, cancion: `Infiel`, ano: 2017, decada: "10s", nacionalidad: "Argentina", preguntaB: `¿Qué simbolo religioso adorna su microfono, que utiiza en todos sus shows?`, respuestaB: `Cruz`, spotify: "https://open.spotify.com/track/39qqJRcvRDFjW5S7kyDHoD" },
 { id: "CUA-007-04", genero: "Cuarteto", nivel: "REVELACIÓN", artista: `Ulises Bueno`, cancion: `Gabriela`, ano: 2016, decada: "10s", nacionalidad: "Argentina", preguntaB: `A diferencia del tono alegre del cuarteto tradicional de los 90s, ¿qué rasgo distintivo tiene el tono de voz de Ulises?`, respuestaB: `Es muy ronco / rasposo`, spotify: "https://open.spotify.com/track/1LoDp9jyH2guSm5wQAy6Ei" },
 { id: "CUA-008-01", genero: "Cuarteto", nivel: "REVELACIÓN", artista: `Trulalá`, cancion: `Mi cama no habla`, ano: 1997, decada: "90s", nacionalidad: "Argentina", preguntaB: `¿Cómo se llamaba el mítico empresario, creador, mánager y descubridor de talentos que fundó la banda en 1984?`, respuestaB: `Manolo Cánovas`, spotify: "https://open.spotify.com/track/4PMi46eDFyLmHKKtVTrDGb" },
 { id: "CUA-008-02", genero: "Cuarteto", nivel: "CONSAGRADO", artista: `Trulalá`, cancion: `Hasta el fin del mundo`, ano: 1997, decada: "90s", nacionalidad: "Argentina", preguntaB: `Conocida como ´La Universidad del Cuarteto´, descubrió a grandes artistas. ¿Cuál de estos NO cantó en Trulalá: Jean Carlos, Gary o La Mona?`, respuestaB: `La Mona Jiménez`, spotify: "https://open.spotify.com/track/4F6PxAv3P7WmDUiFknmRBp" },
@@ -807,13 +808,13 @@ const baseDatos = [
 { id: "CUA-010-02", genero: "Cuarteto", nivel: "REVELACIÓN", artista: `Q' Lokura`, cancion: `Yo era`, ano: 2019, decada: "10s", nacionalidad: "Argentina", preguntaB: `Antes de formar este inmensamente exitoso dúo, Nico Sattler y el ´Chino´ Herrera fueron las voces principales de ¿qué otra popular banda de cuarteto?`, respuestaB: `Chipote`, spotify: "https://open.spotify.com/track/3n6EihEumKlLky7mfeOj71" },
 { id: "CUA-011-01", genero: "Cuarteto", nivel: "REVELACIÓN", artista: `Luck Ra`, cancion: `La Morocha`, ano: 2023, decada: "20s", nacionalidad: "Argentina", preguntaB: `¿Qué popular cantante de  y RKT colabora cantando a dúo?`, respuestaB: `BM`, spotify: "https://open.spotify.com/track/6vRQqxOhUFd78p5tL8jXr7" },
 { id: "CUA-011-02", genero: "Cuarteto", nivel: "REVELACIÓN", artista: `Luck Ra`, cancion: `Hola perdida`, ano: 2024, decada: "20s", nacionalidad: "Argentina", preguntaB: `Para esta canción, Luck Ra invitó a cantar a un pionero del trap argentino. ¿A qué artista urbano sumó al cuarteto?`, respuestaB: `Khea`, spotify: "https://open.spotify.com/track/2FqTbwiogEVvZnkarPf5BV" },
-{ id: "CUA-011-03", genero: "Cuarteto", nivel: "CONSAGRADO", artista: `Luck Ra`, cancion: `Quiero creer`, ano: 2023, decada: "20s", nacionalidad: "Argentina", preguntaB: `Antes de abocarse de lleno a ser la nueva cara del cuarteto nacional, ¿en qué género musical dio sus primeros pasos Luck Ra?`, respuestaB: `Trap`, spotify: "https://open.spotify.com/track/4ZXZub1pPCWib6xlSHiTj6" },
+{ id: "CUA-011-03", genero: "Cuarteto", nivel: "LEYENDA", artista: `Luck Ra`, cancion: `Quiero creer`, ano: 2023, decada: "20s", nacionalidad: "Argentina", preguntaB: `Antes de abocarse de lleno a ser la nueva cara del cuarteto nacional, ¿en qué género musical dio sus primeros pasos Luck Ra?`, respuestaB: `Trap`, spotify: "https://open.spotify.com/track/4ZXZub1pPCWib6xlSHiTj6" },
 { id: "CUA-012-01", genero: "Cuarteto", nivel: "REVELACIÓN", artista: `El Loco Amato`, cancion: `Dónde andarás`, ano: 2018, decada: "10s", nacionalidad: "Argentina", preguntaB: `Antes de lanzar su inmensa carrera como solista, Cristian ´El Loco´ Amato fue durante años el creador, líder y cantante principal de ¿qué otra banda mítica?`, respuestaB: `La Fiesta`, spotify: "https://open.spotify.com/track/20mXFY2pkPVF3ZUhhzzXQn" },
 { id: "CUA-013-01", genero: "Cuarteto", nivel: "REVELACIÓN", artista: `LBC y Euge Quevedo`, cancion: `¿Cómo lo hizo?`, ano: 2022, decada: "20s", nacionalidad: "Argentina", preguntaB: `Eugenia Quevedo le dio una nueva vida y furor a La Banda de Carlitos. En la jerga cuartetera, ¿con qué apodo dental se la conoce popularmente a ella?`, respuestaB: `´La Muela´`, spotify: "https://open.spotify.com/track/2uxr0pjA4XuAhprkOqPyNe" },
 { id: "CUA-013-02", genero: "Cuarteto", nivel: "REVELACIÓN", artista: `LBC y Euge Quevedo`, cancion: `¿Perdonarte, para qué?`, ano: 2024, decada: "20s", nacionalidad: "Argentina", preguntaB: `Este hit reciente es originalmente un cruce internacional de  sonidera y pop urbano. ¿Qué joven cantante argentina canta la versión original?`, respuestaB: `Emilia Mernes`, spotify: "https://open.spotify.com/intl-es/track/4vHxiSkuq0BYpPG2veQt8W?si=53937d6744374249" },
 { id: "CUA-014-01", genero: "Cuarteto", nivel: "CONSAGRADO", artista: `Cachumba`, cancion: `Maldito coche negro`, ano: 1999, decada: "90s", nacionalidad: "Argentina", preguntaB: `¿Cómo es el nombre del cantante de la banda?`, respuestaB: `El Turco Oliva`, spotify: "https://open.spotify.com/track/6SRX0wGHXCC7z34jWhrTnO" },
 { id: "CUA-015-01", genero: "Cuarteto", nivel: "REVELACIÓN", artista: `Desakta2`, cancion: `No se ve`, ano: 2023, decada: "20s", nacionalidad: "Argentina", preguntaB: `Esta fiestera versión en cuarteto es un cover de una Session de un productor reconocido. ¿De quien?`, respuestaB: `Dj TAO`, spotify: "https://open.spotify.com/track/3XGEgflSYNrUbk25NQuUQw" },
-{ id: "CUA-016-01", genero: "Cuarteto", nivel: "CONSAGRADO", artista: `Los Herrera`, cancion: `Y si me dejas`, ano: 2023, decada: "20s", nacionalidad: "Argentina", preguntaB: `El dúo está conformado por dos hermanos (Fede y Fran) que tienen un parentesco muy cercano con el líder de Q' Lokura. ¿Quién es su hermano cuartetero?`, respuestaB: `El ´Chino´ Herrera`, spotify: "https://open.spotify.com/track/4YQib9ISNv7dR5bXsYLtyt" },
+{ id: "CUA-016-01", genero: "Cuarteto", nivel: "LEYENDA", artista: `Los Herrera`, cancion: `Y si me dejas`, ano: 2023, decada: "20s", nacionalidad: "Argentina", preguntaB: `El dúo está conformado por dos hermanos (Fede y Fran) que tienen un parentesco muy cercano con el líder de Q' Lokura. ¿Quién es su hermano cuartetero?`, respuestaB: `El ´Chino´ Herrera`, spotify: "https://open.spotify.com/track/4YQib9ISNv7dR5bXsYLtyt" },
 { id: "CUA-017-01", genero: "Cuarteto", nivel: "REVELACIÓN", artista: `Dale Q' Va`, cancion: `Puño de diamantes`, ano: 2018, decada: "10s", nacionalidad: "Argentina", preguntaB: `Este proyecto cuartetero fue fundado por la unión de dos grandes cantantes (Neno Aguirre y David Ortiz) que venían de ser las voces de ¿qué dos bandas gigantes?`, respuestaB: `Trulalá y Sabroso`, spotify: "https://open.spotify.com/track/564JjmMsfNr4peduzmglAv" },
 { id: "CUA-017-02", genero: "Cuarteto", nivel: "CONSAGRADO", artista: `Dale Q' Va`, cancion: `Libertad provisoria`, ano: 2022, decada: "20s", nacionalidad: "Argentina", preguntaB: `Este éxito adaptado a la música de Córdoba es originalmente un himno del regional mexicano. ¿Qué masiva banda internacional mexicana lo canta originalmente?`, respuestaB: `Grupo Firme`, spotify: "https://open.spotify.com/track/5VOUSvCT3egQ4hzrvLbG1V" },
 { id: "FOL-001-01", genero: "Folklore", nivel: "REVELACIÓN", artista: `Los Nocheros`, cancion: `Entre la tierra y el cielo`, ano: 1999, decada: "90s", nacionalidad: "Argentina", preguntaB: `¿De qué provincia del norte argentino es originaria esta histórica y romántica agrupación folclórica?`, respuestaB: `Salta`, spotify: "https://open.spotify.com/track/1hQgzgaxymIbhqoWpMYDnf" },
@@ -956,6 +957,72 @@ const baseDatos = [
 { id: "INT-094-01", genero: "Internacional", nivel: "REVELACIÓN", artista: `Elvis Presley`, cancion: `Suspicious Minds`, ano: 1969, decada: "60s", nacionalidad: "EE.UU.", preguntaB: `En su etapa consagratoria y en sus legendarios recitales en Hawái o Las Vegas, Elvis lucía invariablemente ¿qué tipo de traje icónico brillante?`, respuestaB: `Trajes enterizos blancos con capa (y cuello alto / lentejuelas)`, spotify: "https://open.spotify.com/track/1H5IfYyIIAlgDX8zguUzns" },
 { id: "INT-095-01", genero: "Internacional", nivel: "REVELACIÓN", artista: `Elton John`, cancion: `Rocket Man`, ano: 1972, decada: "70s", nacionalidad: "Reino Unido", preguntaB: `En la película biográfica oficial del músico que cuenta la historia detrás de esta y otras canciones, ¿qué joven y carismático actor de la realeza británica cinematográfica interpretó magistralmente a Elton?`, respuestaB: `Taron Egerton`, spotify: "https://open.spotify.com/track/3gdewACMIVMEWVbyb8O9sY" },
 { id: "INT-096-01", genero: "Internacional", nivel: "LEYENDA", artista: `The Rolling Stones`, cancion: `(I Can't Get No) Satisfaction`, ano: 1965, decada: "60s", nacionalidad: "Reino Unido", preguntaB: `La leyenda cuenta que el inconfundible y áspero riff de tres notas de esta canción se le ocurrió al guitarrista de la banda, Keith Richards, en qué extraña situación fisiológica?`, respuestaB: `Estaba durmiendo (Se despertó de un sueño, lo grabó en casete y volvió a dormir)`, spotify: "https://open.spotify.com/track/2PzU4IB8Dr6mxV3lHuaG34" },
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

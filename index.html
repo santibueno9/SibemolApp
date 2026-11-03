@@ -109,6 +109,20 @@
         </button>
     </div>
 
+    <!-- MODAL DE VICTORIA (Reemplaza al alert) -->
+    <div id="modal-victoria" class="hidden fixed inset-0 bg-black/90 flex items-center justify-center z-50 p-4">
+        <div class="bg-gray-800 border-4 border-green-500 rounded-3xl p-8 max-w-sm w-full text-center shadow-2xl">
+            <div class="animate-bounce w-20 h-20 bg-green-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                <span class="text-4xl">🎉</span>
+            </div>
+            <h3 id="modal-titulo" class="text-4xl font-black text-white mb-2 tracking-tight">--</h3>
+            <p class="text-gray-400 mb-8 font-medium">Entregá los puntos físicos en la mesa. El jugador tiene derecho a un Turno Bis.</p>
+            <button onclick="cerrarModalYContinuar()" class="w-full bg-green-600 hover:bg-green-500 text-white font-black text-xl py-4 rounded-xl shadow-[0_0_15px_rgba(22,163,74,0.5)] transition">
+                Siguiente Canción 📷
+            </button>
+        </div>
+    </div>
+
     <!-- CONEXIÓN A DATOS Y LÓGICA -->
     <script src="datos.js"></script>
     <script>
@@ -275,10 +289,19 @@
 
         function aciertoPerfecto() {
             let ptsGanados = pidioPista ? (puntosBase - 1) : puntosBase;
-            let mensaje = `¡Ganó ${ptsGanados} Púas!`;
-            if(!pidioPista && puntosBase === 5) mensaje = "¡GARDEL DIRECTO!";
-            alert(mensaje + "\n\nEntregá los puntos. El jugador tiene derecho a un Turno Bis.");
+            let titulo = `¡Ganó ${ptsGanados} Púas!`;
+            if(!pidioPista && puntosBase === 5) titulo = "¡GARDEL DIRECTO!";
+            
+            // Inyecta el texto y muestra el modal estilizado
+            document.getElementById('modal-titulo').textContent = titulo;
+            document.getElementById('modal-victoria').classList.remove('hidden');
+        }
+
+        // Nueva función para el botón del modal
+        function cerrarModalYContinuar() {
+            document.getElementById('modal-victoria').classList.add('hidden');
             abrirSiguienteCarta();
+        }
         }
 
         function irALadoB() {

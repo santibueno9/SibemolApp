@@ -1,4 +1,5 @@
 const baseDatos = [
+
 { id: "ROC-001-01", genero: "Rock", nivel: "REVELACIÓN", artista: `Soda Stereo`, cancion: `Cuando Pase el Temblor`, ano: 1985, decada: "80s", nacionalidad: "Argentina", preguntaB: `¿En qué álbum de 1985 de Soda Stereo que consolidó el sonido de la banda en toda Latinoamérica está incluido este tema con aires andinos?`, respuestaB: `Nada personal`, spotify: "https://open.spotify.com/intl-es/track/3uMYq07Kj5m564OQwdSCrD?si=aa59aa8a7f62491f" },
 { id: "ROC-001-02", genero: "Rock", nivel: "CONSAGRADO", artista: `Soda Stereo`, cancion: `Prófugos`, ano: 1986, decada: "80s", nacionalidad: "Argentina", preguntaB: `¿Cuál es el nombre del tercer disco de estudio de Soda Stereo (1986) donde sale esta canción y que lleva el nombre de una famosa frase urbana?`, respuestaB: `Signos`, spotify: "https://open.spotify.com/intl-es/track/1Bov4bMY1IgfOrvUWWbhSe?si=e9d0d8f02d824cc9" },
 { id: "ROC-001-03", genero: "Rock", nivel: "REVELACIÓN", artista: `Soda Stereo`, cancion: `Persiana Americana`, ano: 1986, decada: "80s", nacionalidad: "Argentina", preguntaB: `´Tus ropas caen lentamente...´. ¿Cómo continúa la frase del estribillo de este clásico absoluto de las radios?`, respuestaB: `´Soy un espía un espectador´`, spotify: "https://open.spotify.com/intl-es/track/4iPA2yB8bK7T770EkkOi7s?si=60c5ab1552b647cb" },
@@ -808,7 +809,7 @@ const baseDatos = [
 { id: "CUA-011-03", genero: "Cuarteto", nivel: "CONSAGRADO", artista: `Luck Ra`, cancion: `Quiero creer`, ano: 2023, decada: "20s", nacionalidad: "Argentina", preguntaB: `Antes de abocarse de lleno a ser la nueva cara del cuarteto nacional, ¿en qué género musical dio sus primeros pasos Luck Ra?`, respuestaB: `Trap`, spotify: "https://open.spotify.com/track/4ZXZub1pPCWib6xlSHiTj6" },
 { id: "CUA-012-01", genero: "Cuarteto", nivel: "REVELACIÓN", artista: `El Loco Amato`, cancion: `Dónde andarás`, ano: 2018, decada: "10s", nacionalidad: "Argentina", preguntaB: `Antes de lanzar su inmensa carrera como solista, Cristian ´El Loco´ Amato fue durante años el creador, líder y cantante principal de ¿qué otra banda mítica?`, respuestaB: `La Fiesta`, spotify: "https://open.spotify.com/track/20mXFY2pkPVF3ZUhhzzXQn" },
 { id: "CUA-013-01", genero: "Cuarteto", nivel: "REVELACIÓN", artista: `LBC y Euge Quevedo`, cancion: `¿Cómo lo hizo?`, ano: 2022, decada: "20s", nacionalidad: "Argentina", preguntaB: `Eugenia Quevedo le dio una nueva vida y furor a La Banda de Carlitos. En la jerga cuartetera, ¿con qué apodo dental se la conoce popularmente a ella?`, respuestaB: `´La Muela´`, spotify: "https://open.spotify.com/track/2uxr0pjA4XuAhprkOqPyNe" },
-{ id: "CUA-013-02", genero: "Cuarteto", nivel: "REVELACIÓN", artista: `LBC y Euge Quevedo`, cancion: `¿Perdonarte, para qué?`, ano: 2024, decada: "20s", nacionalidad: "Argentina", preguntaB: `Este hit reciente es originalmente un cruce internacional de  sonidera y pop urbano. ¿Qué joven cantante argentina canta la versión original?`, respuestaB: `Emilia Mernes`, spotify: "https://open.spotify.com/track/5djlc1fMHiFsSpsQQtopLy" },
+{ id: "CUA-013-02", genero: "Cuarteto", nivel: "REVELACIÓN", artista: `LBC y Euge Quevedo`, cancion: `¿Perdonarte, para qué?`, ano: 2024, decada: "20s", nacionalidad: "Argentina", preguntaB: `Este hit reciente es originalmente un cruce internacional de  sonidera y pop urbano. ¿Qué joven cantante argentina canta la versión original?`, respuestaB: `Emilia Mernes`, spotify: "https://open.spotify.com/intl-es/track/4vHxiSkuq0BYpPG2veQt8W?si=53937d6744374249" },
 { id: "CUA-014-01", genero: "Cuarteto", nivel: "CONSAGRADO", artista: `Cachumba`, cancion: `Maldito coche negro`, ano: 1999, decada: "90s", nacionalidad: "Argentina", preguntaB: `¿Cómo es el nombre del cantante de la banda?`, respuestaB: `El Turco Oliva`, spotify: "https://open.spotify.com/track/6SRX0wGHXCC7z34jWhrTnO" },
 { id: "CUA-015-01", genero: "Cuarteto", nivel: "REVELACIÓN", artista: `Desakta2`, cancion: `No se ve`, ano: 2023, decada: "20s", nacionalidad: "Argentina", preguntaB: `Esta fiestera versión en cuarteto es un cover de una Session de un productor reconocido. ¿De quien?`, respuestaB: `Dj TAO`, spotify: "https://open.spotify.com/track/3XGEgflSYNrUbk25NQuUQw" },
 { id: "CUA-016-01", genero: "Cuarteto", nivel: "CONSAGRADO", artista: `Los Herrera`, cancion: `Y si me dejas`, ano: 2023, decada: "20s", nacionalidad: "Argentina", preguntaB: `El dúo está conformado por dos hermanos (Fede y Fran) que tienen un parentesco muy cercano con el líder de Q' Lokura. ¿Quién es su hermano cuartetero?`, respuestaB: `El ´Chino´ Herrera`, spotify: "https://open.spotify.com/track/4YQib9ISNv7dR5bXsYLtyt" },
@@ -954,6 +955,73 @@ const baseDatos = [
 { id: "INT-094-01", genero: "Internacional", nivel: "REVELACIÓN", artista: `Elvis Presley`, cancion: `Suspicious Minds`, ano: 1969, decada: "60s", nacionalidad: "EE.UU.", preguntaB: `En su etapa consagratoria y en sus legendarios recitales en Hawái o Las Vegas, Elvis lucía invariablemente ¿qué tipo de traje icónico brillante?`, respuestaB: `Trajes enterizos blancos con capa (y cuello alto / lentejuelas)`, spotify: "https://open.spotify.com/track/1H5IfYyIIAlgDX8zguUzns" },
 { id: "INT-095-01", genero: "Internacional", nivel: "REVELACIÓN", artista: `Elton John`, cancion: `Rocket Man`, ano: 1972, decada: "70s", nacionalidad: "Reino Unido", preguntaB: `En la película biográfica oficial del músico que cuenta la historia detrás de esta y otras canciones, ¿qué joven y carismático actor de la realeza británica cinematográfica interpretó magistralmente a Elton?`, respuestaB: `Taron Egerton`, spotify: "https://open.spotify.com/track/3gdewACMIVMEWVbyb8O9sY" },
 { id: "INT-096-01", genero: "Internacional", nivel: "LEYENDA", artista: `The Rolling Stones`, cancion: `(I Can't Get No) Satisfaction`, ano: 1965, decada: "60s", nacionalidad: "Reino Unido", preguntaB: `La leyenda cuenta que el inconfundible y áspero riff de tres notas de esta canción se le ocurrió al guitarrista de la banda, Keith Richards, en qué extraña situación fisiológica?`, respuestaB: `Estaba durmiendo (Se despertó de un sueño, lo grabó en casete y volvió a dormir)`, spotify: "https://open.spotify.com/track/2PzU4IB8Dr6mxV3lHuaG34" },
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 ];
 

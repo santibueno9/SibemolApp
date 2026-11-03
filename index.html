@@ -19,7 +19,7 @@
 </head>
 <body class="bg-gray-900 text-white h-screen flex flex-col items-center justify-center font-sans overflow-hidden">
 
-    <!-- PANTALLA MENÚ (LOBBY - SE ABRE CON EL QR DE LA CAJA) -->
+    <!-- PANTALLA MENÚ (LOBBY) -->
     <div id="pantalla-menu" class="p-6 text-center w-full flex flex-col items-center justify-center h-full transition-all">
         <h1 class="text-5xl font-black mb-2 text-yellow-500 tracking-tighter">SIBEMOL</h1>
         <p class="text-gray-400 mb-12 text-lg">El director de orquesta</p>
@@ -34,10 +34,7 @@
     <!-- PANTALLA ESCÁNER (CÁMARA EN VIVO) -->
     <div id="pantalla-escaner" class="hidden flex-col items-center justify-center w-full h-full p-6">
         <h2 class="text-2xl font-black text-yellow-500 mb-6 animate-pulse">Escaneá una carta...</h2>
-        
-        <!-- Contenedor del video de la cámara -->
         <div id="reader" class="w-full max-w-sm rounded-2xl overflow-hidden border-4 border-gray-700 shadow-2xl bg-black"></div>
-        
         <button onclick="cerrarEscaner()" class="mt-8 text-gray-400 underline text-sm">Cancelar y volver al menú</button>
     </div>
 
@@ -46,7 +43,7 @@
         <span id="ui-nivel" class="text-gray-900 px-4 py-1 rounded-full text-xs font-black uppercase tracking-widest"></span>
         <h2 id="ui-genero" class="text-4xl font-black mt-4 mb-2 tracking-tighter"></h2>
 
-        <!-- REPRODUCTOR SPOTIFY REAL -->
+        <!-- REPRODUCTOR SPOTIFY -->
         <div class="my-6 min-h-[152px]" id="reproductor-spotify"></div>
 
         <!-- Área de Pistas -->
@@ -68,7 +65,6 @@
             </button>
         </div>
         
-        <!-- Botón para avanzar si pidió pista -->
         <button id="btn-continuar-con-pista" onclick="irAVerificacion(true)" class="hidden w-full bg-red-600 hover:bg-red-500 py-3 mt-4 rounded-xl font-bold text-lg shadow-md transition">
             Responder con Pista
             <span id="ui-premio-pista" class="block text-xs text-red-200 font-normal mt-1"></span>
@@ -103,13 +99,12 @@
             <p id="ui-respuesta-ladob" class="text-3xl font-black text-white">--</p>
         </div>
         
-        <!-- EL BOTÓN QUE REINICIA EL CICLO CONTINUO -->
         <button onclick="abrirSiguienteCarta()" class="w-full bg-gray-900 hover:bg-black text-white py-3 rounded-xl font-bold shadow-md transition border border-yellow-500/50">
             Siguiente Canción 📷
         </button>
     </div>
 
-    <!-- MODAL DE VICTORIA (Reemplaza al alert) -->
+    <!-- MODAL DE VICTORIA -->
     <div id="modal-victoria" class="hidden fixed inset-0 bg-black/90 flex items-center justify-center z-50 p-4">
         <div class="bg-gray-800 border-4 border-green-500 rounded-3xl p-8 max-w-sm w-full text-center shadow-2xl">
             <div class="animate-bounce w-20 h-20 bg-green-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
@@ -126,7 +121,6 @@
     <!-- CONEXIÓN A DATOS Y LÓGICA -->
     <script src="datos.js"></script>
     <script>
-        // Colores y Puntos
         const coloresGeneros = {
             "ROCK": { borde: "border-yellow-500", texto: "text-yellow-400", bg: "bg-yellow-500" },
             "ROCKN": { borde: "border-yellow-500", texto: "text-yellow-400", bg: "bg-yellow-500" },
@@ -151,12 +145,6 @@
         const p1 = document.getElementById('pantalla-1');
         const p2 = document.getElementById('pantalla-2');
         const p3 = document.getElementById('pantalla-3');
-        const areaPista = document.getElementById('area-pista');
-        const botonesApuesta = document.getElementById('botones-apuesta');
-        const btnContinuarPista = document.getElementById('btn-continuar-con-pista');
-        const estadoRiesgo = document.getElementById('estado-riesgo');
-        const btnRevelar = document.getElementById('btn-revelar');
-        const respuestaLadoB = document.getElementById('respuesta-lado-b');
         const reproductor = document.getElementById('reproductor-spotify');
 
         function limpiarTexto(texto) {
@@ -170,48 +158,46 @@
             return match ? match[1] : null;
         }
 
-        // Leer URL por si alguien escanea con la cámara nativa del celular por accidente
+        // LÓGICA DE INICIO Y URL
         document.addEventListener("DOMContentLoaded", () => {
             const parametros = new URLSearchParams(window.location.search);
             const generoQR = parametros.get('g'); 
             const nivelQR = parametros.get('d');  
+            
             if(generoQR && nivelQR) {
                 pantallaMenu.classList.add('hidden');
                 iniciarPartida(generoQR, nivelQR);
             }
         });
 
-        // --- LÓGICA DE LA CÁMARA INTERNA ---
+        // LÓGICA DE LA CÁMARA
         function iniciarEscaner() {
             pantallaMenu.classList.add('hidden');
             pantallaEscaner.classList.remove('hidden');
             
-            // Instancia el escáner si no existe
             if (!escanerActivo) {
                 escanerActivo = new Html5Qrcode("reader");
             }
             
             escanerActivo.start(
-                { facingMode: "environment" }, // Usa la cámara trasera
+                { facingMode: "environment" },
                 { fps: 10, qrbox: { width: 250, height: 250 } },
                 (textoEscaneado) => {
-                    // Cuando lee un QR exitosamente
                     try {
                         const urlData = new URL(textoEscaneado);
                         const generoEscaneado = urlData.searchParams.get('g');
                         const nivelEscaneado = urlData.searchParams.get('d');
                         
                         if(generoEscaneado && nivelEscaneado) {
-                            // Apaga la cámara para ahorrar batería y carga la canción
                             cerrarEscanerSolo();
                             iniciarPartida(generoEscaneado, nivelEscaneado);
                         }
                     } catch(e) {
-                        alert("El código QR no pertenece a SIBEMOL.");
+                        alert("Código no válido para SIBEMOL.");
                     }
                 }
             ).catch(err => {
-                alert("Para usar el escáner interno, debes aceptar los permisos de la cámara del navegador.");
+                alert("No se pudo iniciar la cámara. Verificá los permisos del navegador.");
                 cerrarEscaner();
             });
         }
@@ -228,9 +214,11 @@
             pantallaMenu.classList.remove('hidden');
         }
 
-        // --- LÓGICA DEL JUEGO ---
+        // LÓGICA DEL JUEGO Y MEMORIA
         function iniciarPartida(generoBuscado, nivelBuscado) {
-            const opciones = baseDatos.filter(c => 
+            let jugadas = JSON.parse(sessionStorage.getItem('cancionesJugadas')) || [];
+            
+            let opciones = baseDatos.filter(c => 
                 limpiarTexto(c.genero) === limpiarTexto(generoBuscado) && 
                 limpiarTexto(c.nivel) === limpiarTexto(nivelBuscado)
             );
@@ -241,7 +229,25 @@
                 return;
             }
 
-            cancionActual = opciones[Math.floor(Math.random() * opciones.length)];
+            let opcionesDisponibles = opciones.filter(c => !jugadas.includes(c.id));
+
+            if(opcionesDisponibles.length === 0) {
+                alert(`¡Se jugaron todas las canciones de ${generoBuscado} ${nivelBuscado}! Mezclando el mazo de nuevo...`);
+                jugadas = jugadas.filter(idJugada => {
+                    const cancionOriginal = baseDatos.find(c => c.id === idJugada);
+                    if(cancionOriginal) {
+                        return !(limpiarTexto(cancionOriginal.genero) === limpiarTexto(generoBuscado) && limpiarTexto(cancionOriginal.nivel) === limpiarTexto(nivelBuscado));
+                    }
+                    return false;
+                });
+                opcionesDisponibles = opciones;
+            }
+
+            cancionActual = opcionesDisponibles[Math.floor(Math.random() * opcionesDisponibles.length)];
+            
+            jugadas.push(cancionActual.id);
+            sessionStorage.setItem('cancionesJugadas', JSON.stringify(jugadas));
+
             const generoLimpio = limpiarTexto(cancionActual.genero);
             const colorData = coloresGeneros[generoLimpio] || coloresGeneros["VARIADO"];
             const nivelLimpio = limpiarTexto(cancionActual.nivel);
@@ -251,7 +257,7 @@
             if(spotifyID) {
                 reproductor.innerHTML = `<iframe style="border-radius:12px" src="https://open.spotify.com/embed/track/${spotifyID}?utm_source=generator&theme=0" width="100%" height="152" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>`;
             } else {
-                reproductor.innerHTML = `<div class="bg-gray-700 p-4 rounded-xl text-red-400">Audio no disponible para esta canción.</div>`;
+                reproductor.innerHTML = `<div class="bg-gray-700 p-4 rounded-xl text-red-400">Audio no disponible.</div>`;
             }
 
             document.getElementById('ui-genero').textContent = cancionActual.genero;
@@ -272,12 +278,13 @@
             p1.classList.remove('hidden');
         }
 
+        // FLUJO DE INTERFAZ
         function mostrarPista() {
             pidioPista = true;
-            botonesApuesta.classList.add('hidden');
-            areaPista.classList.remove('hidden');
+            document.getElementById('botones-apuesta').classList.add('hidden');
+            document.getElementById('area-pista').classList.remove('hidden');
             p1.className = p1.className.replace(/border-\w+-\d+/, 'border-red-600');
-            btnContinuarPista.classList.remove('hidden');
+            document.getElementById('btn-continuar-con-pista').classList.remove('hidden');
         }
 
         function irAVerificacion(usoPista) {
@@ -292,12 +299,10 @@
             let titulo = `¡Ganó ${ptsGanados} Púas!`;
             if(!pidioPista && puntosBase === 5) titulo = "¡GARDEL DIRECTO!";
             
-            // Inyecta el texto y muestra el modal estilizado
             document.getElementById('modal-titulo').textContent = titulo;
             document.getElementById('modal-victoria').classList.remove('hidden');
         }
 
-        // Nueva función para el botón del modal
         function cerrarModalYContinuar() {
             document.getElementById('modal-victoria').classList.add('hidden');
             abrirSiguienteCarta();
@@ -306,6 +311,7 @@
         function irALadoB() {
             p2.classList.add('hidden');
             p3.classList.remove('hidden');
+            const estadoRiesgo = document.getElementById('estado-riesgo');
             if(pidioPista) {
                 estadoRiesgo.innerHTML = `<p class="text-red-300 font-bold uppercase text-sm">¡Zona de Riesgo!</p><p class="text-xs text-white">Acierto: Dar 1 Púa | Fallo: Quitar 1 Púa</p>`;
             } else {
@@ -314,28 +320,25 @@
         }
 
         function revelarRespuesta() {
-            btnRevelar.classList.add('hidden');
-            respuestaLadoB.classList.remove('hidden');
+            document.getElementById('btn-revelar').classList.add('hidden');
+            document.getElementById('respuesta-lado-b').classList.remove('hidden');
         }
 
         function abrirSiguienteCarta() {
-            // Limpia la pantalla y abre el escáner directamente para el ciclo continuo
             pidioPista = false;
             p3.classList.add('hidden');
             p2.classList.add('hidden');
             p1.classList.add('hidden');
             
-            areaPista.classList.add('hidden');
-            botonesApuesta.classList.remove('hidden');
-            btnContinuarPista.classList.add('hidden');
-            btnRevelar.classList.remove('hidden');
-            respuestaLadoB.classList.add('hidden');
+            document.getElementById('area-pista').classList.add('hidden');
+            document.getElementById('botones-apuesta').classList.remove('hidden');
+            document.getElementById('btn-continuar-con-pista').classList.add('hidden');
+            document.getElementById('btn-revelar').classList.remove('hidden');
+            document.getElementById('respuesta-lado-b').classList.add('hidden');
             
-            // Si hay parámetros en la URL (alguien entró usando cámara externa), los limpiamos
             if(window.location.search) {
                 window.history.replaceState({}, document.title, window.location.pathname);
             }
-            
             iniciarEscaner();
         }
     </script>

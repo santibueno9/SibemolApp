@@ -19,7 +19,7 @@
 </head>
 <body class="bg-gray-900 text-white h-screen flex flex-col items-center justify-center font-sans overflow-hidden">
 
-    <!-- PANTALLA MENÚ (LOBBY) -->
+   <!-- PANTALLA MENÚ (LOBBY) -->
     <div id="pantalla-menu" class="p-6 text-center w-full flex flex-col items-center justify-center h-full transition-all">
         <h1 class="text-5xl font-black mb-2 text-yellow-500 tracking-tighter">SIBEMOL</h1>
         <p class="text-gray-400 mb-12 text-lg">El director de orquesta</p>
@@ -28,7 +28,59 @@
             ¡Dale Play!
         </button>
         
-        <p class="text-gray-500 text-sm mt-8">Apoyá el mazo en la mesa y prepará la cámara.</p>
+        <!-- Nuevo botón de reglas -->
+        <button onclick="abrirInstrucciones()" class="mt-8 text-gray-400 hover:text-white underline text-sm transition">
+            ¿Cómo se juega?
+        </button>
+        
+        <p class="text-gray-600 text-xs mt-4">Apoyá el mazo en la mesa y prepará la cámara.</p>
+    </div>
+
+    <!-- MODAL DE INSTRUCCIONES -->
+    <div id="modal-instrucciones" class="hidden fixed inset-0 bg-black/95 flex items-center justify-center z-50 p-4">
+        <div class="bg-gray-800 border-2 border-gray-600 rounded-3xl p-6 max-w-md w-full shadow-2xl overflow-y-auto max-h-[85vh] text-left">
+            <h2 class="text-3xl font-black text-yellow-500 mb-4 text-center tracking-tight">CÓMO JUGAR</h2>
+            
+            <div class="space-y-4 text-sm text-gray-300">
+                <div>
+                    <h4 class="text-white font-bold text-base mb-1">🎯 Objetivo</h4>
+                    <p>Comprar <span class="text-yellow-400 font-bold">7 Fichas Gardel</span>. (1 Gardel = 5 Púas).</p>
+                </div>
+
+                <div>
+                    <h4 class="text-white font-bold text-base mb-1">🎧 Tu Turno</h4>
+                    <p>Escaneá una carta, escuchá el audio y adiviná 3 datos: <strong class="text-white">Artista, Canción y Año</strong>.</p>
+                </div>
+
+                <div class="bg-gray-900 p-3 rounded-lg border border-gray-700">
+                    <h4 class="text-green-400 font-bold text-base mb-2">Puntuación (Acierto 3/3)</h4>
+                    <ul class="list-disc pl-4 space-y-1">
+                        <li><strong class="text-white">⭐ Revelación:</strong> 3 Púas</li>
+                        <li><strong class="text-white">🌟 Consagrado:</strong> 4 Púas</li>
+                        <li><strong class="text-white">👑 Leyenda:</strong> 5 Púas (¡Un Gardel directo!)</li>
+                        <li><strong class="text-white">Turno Bis:</strong> Un acierto 3/3 te da un turno extra consecutivo.</li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="text-white font-bold text-base mb-1">🆘 Pedir Pista (Riesgo)</h4>
+                    <p>Revelar la Década y Nacionalidad resta 1 Púa de tu premio máximo y te hace entrar en la <span class="text-red-400 font-bold">Zona de Riesgo</span>.</p>
+                </div>
+
+                <div class="bg-red-900/30 p-3 rounded-lg border border-red-900/50">
+                    <h4 class="text-orange-400 font-bold text-base mb-2">El Lado B (Penalizaciones)</h4>
+                    <p class="mb-2">Si fallás la canción, respondés la trivia para salvar el turno:</p>
+                    <ul class="list-disc pl-4 space-y-1">
+                        <li><strong class="text-white">Entraste Sin Pista:</strong> Acierto = +1 Púa. Fallo = 0 Púas.</li>
+                        <li><strong class="text-white">Entraste Con Pista:</strong> Acierto = +1 Púa. Fallo = <span class="text-red-400 font-bold">-1 Púa</span>.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <button onclick="cerrarInstrucciones()" class="w-full mt-6 bg-gray-600 hover:bg-gray-500 text-white font-bold py-3 rounded-xl transition">
+                Entendido
+            </button>
+        </div>
     </div>
 
     <!-- PANTALLA ESCÁNER (CÁMARA EN VIVO) -->
@@ -348,6 +400,14 @@
                 window.history.replaceState({}, document.title, window.location.pathname);
             }
             iniciarEscaner();
+        }
+
+        function abrirInstrucciones() {
+            document.getElementById('modal-instrucciones').classList.remove('hidden');
+        }
+
+        function cerrarInstrucciones() {
+            document.getElementById('modal-instrucciones').classList.add('hidden');
         }
     </script>
 </body>

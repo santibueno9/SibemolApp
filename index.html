@@ -15,11 +15,16 @@
             0%, 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
             50% { box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); }
         }
+        /* Custom scrollbar para el modal */
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: #374151; border-radius: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #6b7280; border-radius: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #9ca3af; }
     </style>
 </head>
 <body class="bg-gray-900 text-white h-screen flex flex-col items-center justify-center font-sans overflow-hidden">
 
-   <!-- PANTALLA MENÚ (LOBBY) -->
+    <!-- PANTALLA MENÚ (LOBBY - SE ABRE CON EL QR DE LA CAJA) -->
     <div id="pantalla-menu" class="p-6 text-center w-full flex flex-col items-center justify-center h-full transition-all">
         <h1 class="text-5xl font-black mb-2 text-yellow-500 tracking-tighter">SIBEMOL</h1>
         <p class="text-gray-400 mb-12 text-lg">El director de orquesta</p>
@@ -27,98 +32,76 @@
         <button onclick="iniciarEscaner()" class="bg-yellow-500 text-gray-900 font-black text-3xl py-5 px-10 rounded-full shadow-lg hover:scale-105 transition transform shadow-yellow-500/50">
             ¡Dale Play!
         </button>
-        
-        <!-- Nuevo botón de reglas -->
-        <button onclick="abrirInstrucciones()" class="mt-8 text-gray-400 hover:text-white underline text-sm transition">
-            ¿Cómo se juega?
+
+        <!-- NUEVO BOTÓN: REGLAMENTO -->
+        <button onclick="abrirInstrucciones()" class="mt-8 px-6 py-2 bg-gray-800 text-gray-300 font-bold rounded-full text-sm shadow-lg hover:bg-gray-700 transition border border-gray-600">
+            📖 Reglas del Juego
         </button>
         
-        <p class="text-gray-600 text-xs mt-4">Apoyá el mazo en la mesa y prepará la cámara.</p>
-    </div>
-
-    <!-- MODAL DE INSTRUCCIONES -->
-    <div id="modal-instrucciones" class="hidden fixed inset-0 bg-black/95 flex items-center justify-center z-50 p-4">
-        <div class="bg-gray-800 border-2 border-gray-600 rounded-3xl p-6 max-w-md w-full shadow-2xl overflow-y-auto max-h-[85vh] text-left">
-            <h2 class="text-3xl font-black text-yellow-500 mb-4 text-center tracking-tight">CÓMO JUGAR</h2>
-            
-            <div class="space-y-4 text-sm text-gray-300">
-                <div>
-                    <h4 class="text-white font-bold text-base mb-1">🎯 Objetivo</h4>
-                    <p>Comprar <span class="text-yellow-400 font-bold">7 Fichas Gardel</span>. (1 Gardel = 5 Púas).</p>
-                </div>
-
-                <div>
-                    <h4 class="text-white font-bold text-base mb-1">🎧 Tu Turno</h4>
-                    <p>Escaneá una carta, escuchá el audio y adiviná 3 datos: <strong class="text-white">Artista, Canción y Año</strong>.</p>
-                </div>
-
-                <div class="bg-gray-900 p-3 rounded-lg border border-gray-700">
-                    <h4 class="text-green-400 font-bold text-base mb-2">Puntuación (Acierto 3/3)</h4>
-                    <ul class="list-disc pl-4 space-y-1">
-                        <li><strong class="text-white">⭐ Revelación:</strong> 3 Púas</li>
-                        <li><strong class="text-white">🌟 Consagrado:</strong> 4 Púas</li>
-                        <li><strong class="text-white">👑 Leyenda:</strong> 5 Púas (¡Un Gardel directo!)</li>
-                        <li><strong class="text-white">Turno Bis:</strong> Un acierto 3/3 te da un turno extra consecutivo.</li>
-                    </ul>
-                </div>
-
-                <div>
-                    <h4 class="text-white font-bold text-base mb-1">🆘 Pedir Pista (Riesgo)</h4>
-                    <p>Revelar la Década y Nacionalidad resta 1 Púa de tu premio máximo y te hace entrar en la <span class="text-red-400 font-bold">Zona de Riesgo</span>.</p>
-                </div>
-
-                <div class="bg-red-900/30 p-3 rounded-lg border border-red-900/50">
-                    <h4 class="text-orange-400 font-bold text-base mb-2">El Lado B (Penalizaciones)</h4>
-                    <p class="mb-2">Si fallás la canción, respondés la trivia para salvar el turno:</p>
-                    <ul class="list-disc pl-4 space-y-1">
-                        <li><strong class="text-white">Entraste Sin Pista:</strong> Acierto = +1 Púa. Fallo = 0 Púas.</li>
-                        <li><strong class="text-white">Entraste Con Pista:</strong> Acierto = +1 Púa. Fallo = <span class="text-red-400 font-bold">-1 Púa</span>.</li>
-                    </ul>
-                </div>
-            </div>
-
-            <button onclick="cerrarInstrucciones()" class="w-full mt-6 bg-gray-600 hover:bg-gray-500 text-white font-bold py-3 rounded-xl transition">
-                Entendido
-            </button>
-        </div>
+        <p class="text-gray-500 text-xs mt-6">Apoyá el mazo en la mesa y prepará la cámara.</p>
     </div>
 
     <!-- PANTALLA ESCÁNER (CÁMARA EN VIVO) -->
     <div id="pantalla-escaner" class="hidden flex-col items-center justify-center w-full h-full p-6">
         <h2 class="text-2xl font-black text-yellow-500 mb-6 animate-pulse">Escaneá una carta...</h2>
+        
+        <!-- Contenedor del video de la cámara -->
         <div id="reader" class="w-full max-w-sm rounded-2xl overflow-hidden border-4 border-gray-700 shadow-2xl bg-black"></div>
+        
         <button onclick="cerrarEscaner()" class="mt-8 text-gray-400 underline text-sm">Cancelar y volver al menú</button>
     </div>
 
     <!-- REPRODUCTOR FLOTANTE (Se mantiene visible en todas las pantallas del turno) -->
-    <div id="reproductor-global" class="hidden w-11/12 max-w-sm mb-4 transition-all duration-300">
+    <div id="reproductor-global" class="hidden w-11/12 max-w-sm mb-4 transition-all duration-300 z-10 relative">
         <div id="reproductor-spotify" class="min-h-[152px]"></div>
     </div>
 
     <!-- PANTALLA 1: ESCUCHA Y APUESTAS -->
-    <div id="pantalla-1" class="hidden bg-gray-800 p-6 rounded-2xl shadow-2xl w-11/12 max-w-sm text-center transition-all duration-300">
+    <div id="pantalla-1" class="hidden bg-gray-800 p-6 rounded-2xl shadow-2xl w-11/12 max-w-sm text-center transition-all duration-300 relative z-0">
         <span id="ui-nivel" class="text-gray-900 px-4 py-1 rounded-full text-xs font-black uppercase tracking-widest"></span>
         <h2 id="ui-genero" class="text-4xl font-black mt-4 mb-6 tracking-tighter"></h2>
 
-        <!-- Área de Pistas -->
-        <div id="area-pista" class="hidden bg-red-900/50 border border-red-500 rounded-lg p-3 mb-6 pulse-red">
-            <p class="text-red-400 text-xs font-bold uppercase mb-1">¡Zona de Riesgo Activada!</p>
-            <p id="ui-pista-decada" class="font-bold text-lg">Década: --</p>
-            <p id="ui-pista-nacionalidad" class="font-bold text-lg">Nacionalidad: --</p>
+        <!-- ÁREA DE SELECCIÓN DE PISTAS (Oculta por defecto) -->
+        <div id="area-seleccion-pistas" class="hidden bg-gray-900 border border-gray-700 rounded-xl p-4 mb-6 text-left shadow-inner">
+            <div class="flex justify-between items-center mb-3">
+                <p class="text-yellow-500 text-sm font-bold uppercase tracking-wider">Elige tu pista</p>
+                <p class="text-red-400 text-xs font-bold uppercase animate-pulse">Zona de Riesgo</p>
+            </div>
+            
+            <p class="text-gray-400 text-xs mb-3">Seleccioná un único dato para revelar. El premio se reduce 1 Púa.</p>
+            
+            <div class="space-y-2">
+                <button id="btn-opcion-artista" onclick="revelarPistaEspecifica('artista')" class="w-full bg-gray-700 hover:bg-gray-600 text-left px-4 py-3 rounded-lg font-medium text-sm transition border border-gray-600">
+                    👤 Pista sobre el Artista
+                </button>
+                <button id="btn-opcion-cancion" onclick="revelarPistaEspecifica('cancion')" class="w-full bg-gray-700 hover:bg-gray-600 text-left px-4 py-3 rounded-lg font-medium text-sm transition border border-gray-600">
+                    🎵 Pista sobre la Canción
+                </button>
+                <button id="btn-opcion-ano" onclick="revelarPistaEspecifica('ano')" class="w-full bg-gray-700 hover:bg-gray-600 text-left px-4 py-3 rounded-lg font-medium text-sm transition border border-gray-600">
+                    📅 Pista sobre el Año
+                </button>
+            </div>
         </div>
 
-        <!-- Botones -->
+        <!-- ÁREA DONDE SE MUESTRA LA PISTA REVELADA -->
+        <div id="area-pista-revelada" class="hidden bg-red-900/40 border-2 border-red-500 rounded-xl p-4 mb-6 pulse-red">
+            <p id="ui-tipo-pista-revelada" class="text-red-400 text-xs font-bold uppercase mb-2">--</p>
+            <p id="ui-texto-pista-revelada" class="font-medium text-lg text-white">--</p>
+        </div>
+
+        <!-- Botones Principales -->
         <div class="space-y-3" id="botones-apuesta">
             <button onclick="irAVerificacion(false)" class="w-full bg-green-600 hover:bg-green-500 py-3 rounded-xl font-bold text-lg shadow-md transition">
                 ¡Lo tengo! (A Ciegas)
                 <span id="ui-premio-maximo" class="block text-xs text-green-200 font-normal mt-1"></span>
             </button>
-            <button id="btn-pedir-pista" onclick="mostrarPista()" class="w-full bg-orange-600 hover:bg-orange-500 py-3 rounded-xl font-bold text-lg shadow-md transition">
-                Pedir Pista
+            <button id="btn-pedir-pista" onclick="mostrarOpcionesPista()" class="w-full bg-orange-600 hover:bg-orange-500 py-3 rounded-xl font-bold text-lg shadow-md transition">
+                🔍 Pedir Pista
                 <span class="block text-xs text-orange-200 font-normal mt-1">Pierde 1 púa · Habilita Riesgo</span>
             </button>
         </div>
         
+        <!-- Botón para avanzar si pidió pista -->
         <button id="btn-continuar-con-pista" onclick="irAVerificacion(true)" class="hidden w-full bg-red-600 hover:bg-red-500 py-3 mt-4 rounded-xl font-bold text-lg shadow-md transition">
             Responder con Pista
             <span id="ui-premio-pista" class="block text-xs text-red-200 font-normal mt-1"></span>
@@ -126,7 +109,7 @@
     </div>
 
     <!-- PANTALLA 2: VERIFICACIÓN 3/3 -->
-    <div id="pantalla-2" class="hidden bg-gray-800 p-6 rounded-2xl shadow-2xl w-11/12 max-w-sm text-center border-4 border-gray-600">
+    <div id="pantalla-2" class="hidden bg-gray-800 p-6 rounded-2xl shadow-2xl w-11/12 max-w-sm text-center border-4 border-gray-600 relative z-0">
         <h3 class="text-xl font-bold text-gray-400 mb-6 uppercase tracking-widest">Verificación</h3>
         <div class="space-y-4 mb-8">
             <div><p class="text-sm text-gray-400">Artista</p><p id="ui-artista" class="text-2xl font-black text-white">--</p></div>
@@ -140,7 +123,7 @@
     </div>
 
     <!-- PANTALLA 3: LADO B -->
-    <div id="pantalla-3" class="hidden bg-gradient-to-br from-yellow-600 to-yellow-800 p-6 rounded-2xl shadow-2xl w-11/12 max-w-sm text-center border-2 border-yellow-300">
+    <div id="pantalla-3" class="hidden bg-gradient-to-br from-yellow-600 to-yellow-800 p-6 rounded-2xl shadow-2xl w-11/12 max-w-sm text-center border-2 border-yellow-300 relative z-0">
         <h3 class="text-2xl font-black text-white mb-2 tracking-tight">EL LADO B</h3>
         <div id="estado-riesgo" class="bg-black/30 rounded-lg p-2 mb-6"></div>
         <p id="ui-pregunta-ladob" class="text-lg font-medium text-yellow-50 mb-8 italic">--</p>
@@ -153,7 +136,6 @@
             <p id="ui-respuesta-ladob" class="text-3xl font-black text-white">--</p>
         </div>
         
-        <!-- Este botón ahora arranca oculto -->
         <button id="btn-siguiente-turno" onclick="abrirSiguienteCarta()" class="hidden w-full bg-gray-900 hover:bg-black text-white py-3 rounded-xl font-bold shadow-md transition border border-yellow-500/50">
             Siguiente Canción 📷
         </button>
@@ -169,6 +151,55 @@
             <p class="text-gray-400 mb-8 font-medium">Entregá los puntos físicos en la mesa. El jugador tiene derecho a un Turno Bis.</p>
             <button onclick="cerrarModalYContinuar()" class="w-full bg-green-600 hover:bg-green-500 text-white font-black text-xl py-4 rounded-xl shadow-[0_0_15px_rgba(22,163,74,0.5)] transition">
                 Siguiente Canción 📷
+            </button>
+        </div>
+    </div>
+
+    <!-- MODAL DE INSTRUCCIONES -->
+    <div id="modal-instrucciones" class="hidden fixed inset-0 bg-black/95 flex flex-col items-center justify-center z-50 p-6 overflow-y-auto">
+        <div class="bg-gray-800 border-2 border-yellow-500 rounded-3xl p-6 max-w-md w-full shadow-2xl relative my-auto">
+            
+            <button onclick="cerrarInstrucciones()" class="absolute top-4 right-4 text-gray-400 hover:text-white text-2xl font-black">
+                ✕
+            </button>
+            
+            <h2 class="text-2xl font-black text-yellow-500 mb-4 tracking-tight border-b border-gray-700 pb-2">REGLAS DE SIBEMOL</h2>
+            
+            <div class="text-left text-sm text-gray-300 space-y-4 max-h-[60vh] overflow-y-auto pr-2 custom-scrollbar">
+                
+                <div>
+                    <h3 class="text-yellow-400 font-bold mb-1">🎯 Objetivo del Juego</h3>
+                    <p>El primer jugador en conseguir <span class="text-white font-bold">7 Gardeles</span> gana la partida. Los Gardeles se compran con Púas (puntos).</p>
+                </div>
+
+                <div>
+                    <h3 class="text-yellow-400 font-bold mb-1">💰 Economía y Dificultad</h3>
+                    <p>Al escanear la carta oculta, escucharás la canción. Adivinar Artista, Canción y Año (3/3) te premia con Púas según la dificultad de la carta revelada:</p>
+                    <ul class="list-disc pl-5 mt-1 space-y-1">
+                        <li>⭐ <span class="text-white font-bold">Revelación:</span> +3 Púas</li>
+                        <li>🌟 <span class="text-white font-bold">Consagrado:</span> +4 Púas</li>
+                        <li>👑 <span class="text-white font-bold">Leyenda:</span> +5 Púas</li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h3 class="text-yellow-400 font-bold mb-1">🔍 Pedir Pista y Zona de Riesgo</h3>
+                    <p>Podés pedir que la WebApp revele una pista sobre el <span class="text-white font-bold">Artista, la Canción o el Año</span>. Esto te costará 1 Púa del botín máximo y te empujará a la <span class="text-red-400 font-bold">Zona de Riesgo</span> si fallás la canción (3/3).</p>
+                </div>
+
+                <div>
+                    <h3 class="text-yellow-400 font-bold mb-1">❌ El Lado B (Penalizaciones)</h3>
+                    <p>Si no lográs adivinar la canción (3/3), pasás a responder la trivia del <span class="text-white font-bold">Lado B</span>:</p>
+                    <ul class="list-disc pl-5 mt-1 space-y-1">
+                        <li><span class="text-green-400 font-bold">Sin Pista:</span> Acierto +1 Púa / Fallo 0 Púas.</li>
+                        <li><span class="text-red-400 font-bold">Con Pista (Riesgo):</span> Acierto +1 Púa / Fallo <span class="text-red-400 font-bold">-1 Púa</span> de tu ahorro.</li>
+                    </ul>
+                </div>
+
+            </div>
+            
+            <button onclick="cerrarInstrucciones()" class="w-full bg-yellow-500 hover:bg-yellow-400 text-gray-900 font-black text-lg py-3 rounded-xl mt-6 shadow-md transition">
+                ¡Entendido!
             </button>
         </div>
     </div>
@@ -214,6 +245,7 @@
             return match ? match[1] : null;
         }
 
+        // LÓGICA DE INICIO Y URL
         document.addEventListener("DOMContentLoaded", () => {
             const parametros = new URLSearchParams(window.location.search);
             const generoQR = parametros.get('g'); 
@@ -225,6 +257,7 @@
             }
         });
 
+        // LÓGICA DE LA CÁMARA
         function iniciarEscaner() {
             pantallaMenu.classList.add('hidden');
             pantallaEscaner.classList.remove('hidden');
@@ -268,6 +301,7 @@
             pantallaMenu.classList.remove('hidden');
         }
 
+        // LÓGICA DEL JUEGO Y MEMORIA
         function iniciarPartida(generoBuscado, nivelBuscado) {
             let jugadas = JSON.parse(sessionStorage.getItem('cancionesJugadas')) || [];
             
@@ -316,10 +350,8 @@
             document.getElementById('ui-genero').className = `text-4xl font-black mt-4 mb-6 tracking-tighter ${colorData.texto}`;
             document.getElementById('ui-nivel').innerHTML = (nivelLimpio === "LEYENDA" ? "👑 " : (nivelLimpio === "CONSAGRADO" ? "🌟 " : "⭐ ")) + cancionActual.nivel;
             document.getElementById('ui-nivel').className = `text-gray-900 px-4 py-1 rounded-full text-xs font-black uppercase tracking-widest ${colorData.bg}`;
-            p1.className = `bg-gray-800 p-6 rounded-2xl shadow-2xl w-11/12 max-w-sm text-center border-4 ${colorData.borde} transition-all duration-300`;
+            p1.className = `bg-gray-800 p-6 rounded-2xl shadow-2xl w-11/12 max-w-sm text-center border-4 ${colorData.borde} transition-all duration-300 relative z-0`;
             document.getElementById('ui-premio-maximo').textContent = `Lado B Seguro · Premio: ${puntosBase} Púas` + (nivelLimpio === "LEYENDA" ? " (¡GARDEL DIRECTO!)" : "");
-            document.getElementById('ui-pista-decada').textContent = `Década: ${cancionActual.decada}`;
-            document.getElementById('ui-pista-nacionalidad').textContent = `Nacionalidad: ${cancionActual.nacionalidad}`;
             document.getElementById('ui-premio-pista').textContent = `Premio: ${puntosBase - 1} Púas`;
             document.getElementById('ui-artista').textContent = cancionActual.artista;
             document.getElementById('ui-cancion').textContent = cancionActual.cancion;
@@ -332,11 +364,32 @@
             p1.classList.remove('hidden');
         }
 
-        function mostrarPista() {
-            pidioPista = true;
+        // FLUJO DE PISTAS (NUEVO MENÚ 3 BOTONES)
+        function mostrarOpcionesPista() {
             document.getElementById('botones-apuesta').classList.add('hidden');
-            document.getElementById('area-pista').classList.remove('hidden');
+            document.getElementById('area-seleccion-pistas').classList.remove('hidden');
             p1.className = p1.className.replace(/border-\w+-\d+/, 'border-red-600');
+        }
+
+        function revelarPistaEspecifica(tipo) {
+            pidioPista = true;
+            document.getElementById('area-seleccion-pistas').classList.add('hidden');
+            
+            const tipoTitulo = document.getElementById('ui-tipo-pista-revelada');
+            const textoPista = document.getElementById('ui-texto-pista-revelada');
+            
+            if(tipo === 'artista') {
+                tipoTitulo.textContent = "Pista del Artista";
+                textoPista.textContent = `"${cancionActual.pistaArtista}"`;
+            } else if(tipo === 'cancion') {
+                tipoTitulo.textContent = "Pista de la Canción";
+                textoPista.textContent = `"${cancionActual.pistaCancion}"`;
+            } else if(tipo === 'ano') {
+                tipoTitulo.textContent = "Pista del Año";
+                textoPista.textContent = `"${cancionActual.pistaAno}"`;
+            }
+
+            document.getElementById('area-pista-revelada').classList.remove('hidden');
             document.getElementById('btn-continuar-con-pista').classList.remove('hidden');
         }
 
@@ -344,7 +397,6 @@
             pidioPista = usoPista;
             p1.classList.add('hidden');
             p2.classList.remove('hidden');
-            // Ya no borramos el HTML del reproductor, para que siga sonando la música
         }
 
         function aciertoPerfecto() {
@@ -375,7 +427,6 @@
         function revelarRespuesta() {
             document.getElementById('btn-revelar').classList.add('hidden');
             document.getElementById('respuesta-lado-b').classList.remove('hidden');
-            // Recién acá aparece el botón para avanzar
             document.getElementById('btn-siguiente-turno').classList.remove('hidden');
         }
 
@@ -385,11 +436,13 @@
             p2.classList.add('hidden');
             p1.classList.add('hidden');
             
-            // Ocultamos el reproductor y cortamos la música ahora sí
             reproductorGlobal.classList.add('hidden');
             reproductor.innerHTML = '';
             
-            document.getElementById('area-pista').classList.add('hidden');
+            // Limpieza de paneles viejos
+            document.getElementById('area-seleccion-pistas').classList.add('hidden');
+            document.getElementById('area-pista-revelada').classList.add('hidden');
+            
             document.getElementById('botones-apuesta').classList.remove('hidden');
             document.getElementById('btn-continuar-con-pista').classList.add('hidden');
             document.getElementById('btn-revelar').classList.remove('hidden');
@@ -402,6 +455,7 @@
             iniciarEscaner();
         }
 
+        // REGLAMENTO MODAL
         function abrirInstrucciones() {
             document.getElementById('modal-instrucciones').classList.remove('hidden');
         }

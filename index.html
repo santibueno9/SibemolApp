@@ -48,7 +48,10 @@
         <!-- Contenedor del video de la cámara -->
         <div id="reader" class="w-full max-w-sm rounded-2xl overflow-hidden border-4 border-gray-700 shadow-2xl bg-black"></div>
         
-        <button onclick="cerrarEscaner()" class="mt-8 text-gray-400 underline text-sm">Cancelar y volver al menú</button>
+        <button onclick="cerrarEscaner()" class="mt-8 bg-gray-800 text-gray-300 border-2 border-gray-600 hover:bg-gray-700 hover:text-white font-bold text-sm py-3 px-8 rounded-full shadow-lg transition flex items-center gap-2">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            Cancelar y volver al menú
+        </button>
     </div>
 
     <!-- REPRODUCTOR FLOTANTE (Se mantiene visible en todas las pantallas del turno) -->
@@ -62,13 +65,19 @@
         <h2 id="ui-genero" class="text-4xl font-black mt-4 mb-6 tracking-tighter"></h2>
 
         <!-- ÁREA DE SELECCIÓN DE PISTAS (Oculta por defecto) -->
-        <div id="area-seleccion-pistas" class="hidden bg-gray-900 border border-gray-700 rounded-xl p-4 mb-6 text-left shadow-inner">
-            <div class="flex justify-between items-center mb-3">
-                <p class="text-yellow-500 text-sm font-bold uppercase tracking-wider">Elige tu pista</p>
-                <p class="text-red-400 text-xs font-bold uppercase animate-pulse">Zona de Riesgo</p>
+        <div id="area-seleccion-pistas" class="hidden bg-gray-900 border border-gray-700 rounded-xl p-4 mb-6 text-left shadow-inner relative">
+            
+            <!-- Botón Volver (Flecha Superior Izquierda) -->
+            <button onclick="ocultarOpcionesPista()" class="absolute top-3 left-3 text-gray-400 hover:text-white transition">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+            </button>
+
+            <div class="flex justify-end items-center mb-3">
+                <p class="text-red-400 text-xs font-bold uppercase animate-pulse pr-2">Zona de Riesgo</p>
             </div>
             
-            <p class="text-gray-400 text-xs mb-3">Seleccioná un único dato para revelar. El premio se reduce 1 Púa.</p>
+            <p class="text-center text-yellow-500 text-sm font-bold uppercase tracking-wider mb-1 mt-2">Elige tu pista</p>
+            <p class="text-center text-gray-400 text-xs mb-4">Seleccioná un dato. El premio se reduce 1 Púa.</p>
             
             <div class="space-y-2">
                 <button id="btn-opcion-artista" onclick="revelarPistaEspecifica('artista')" class="w-full bg-gray-700 hover:bg-gray-600 text-left px-4 py-3 rounded-lg font-medium text-sm transition border border-gray-600">
@@ -180,6 +189,8 @@
                         <li>🌟 <span class="text-white font-bold">Consagrado:</span> +4 Púas</li>
                         <li>👑 <span class="text-white font-bold">Leyenda:</span> +5 Púas</li>
                     </ul>
+                    <p class="mt-2 text-green-300 font-bold">🔄 Turno Bis:</p>
+                    <p class="text-xs">Un acierto 3/3 impecable otorga el derecho a jugar un turno extra consecutivo. <span class="font-bold underline text-white">Límite estricto:</span> Solo se permite un (1) Turno Bis por jugador. Tras jugar dos cartas seguidas, el turno siempre pasa al siguiente participante.</p>
                 </div>
 
                 <div>
@@ -207,17 +218,17 @@
     <!-- CONEXIÓN A DATOS Y LÓGICA -->
     <script src="datos.js"></script>
     <script>
+        // --- COLORES ACTUALIZADOS ESTRICTAMENTE ---
         const coloresGeneros = {
-            "ROCK": { borde: "border-yellow-500", texto: "text-yellow-400", bg: "bg-yellow-500" },
             "ROCKN": { borde: "border-yellow-500", texto: "text-yellow-400", bg: "bg-yellow-500" },
             "ROCKE": { borde: "border-yellow-500", texto: "text-yellow-400", bg: "bg-yellow-500" },
-            "POP": { borde: "border-blue-500", texto: "text-blue-400", bg: "bg-blue-500" },
-            "CUMBIA": { borde: "border-amber-700", texto: "text-amber-600", bg: "bg-amber-700" },
-            "CUARTETO": { borde: "border-red-900", texto: "text-red-800", bg: "bg-red-900" },
+            "POP": { borde: "border-blue-600", texto: "text-blue-400", bg: "bg-blue-600" },
             "REGGAETON": { borde: "border-purple-600", texto: "text-purple-400", bg: "bg-purple-600" },
+            "CUMBIA": { borde: "border-rose-900", texto: "text-rose-400", bg: "bg-rose-900" },
+            "CUARTETO": { borde: "border-red-600", texto: "text-red-500", bg: "bg-red-600" },
             "FOLKLORE": { borde: "border-orange-500", texto: "text-orange-400", bg: "bg-orange-500" },
             "VARIADO": { borde: "border-green-500", texto: "text-green-400", bg: "bg-green-500" },
-            "INTERNACIONAL": { borde: "border-red-600", texto: "text-red-500", bg: "bg-red-600" }
+            "INTERNACIONAL": { borde: "border-sky-400", texto: "text-sky-400", bg: "bg-sky-500" }
         };
         const puntosNivel = { "REVELACION": 3, "CONSAGRADO": 4, "LEYENDA": 5 };
 
@@ -364,11 +375,20 @@
             p1.classList.remove('hidden');
         }
 
-        // FLUJO DE PISTAS (NUEVO MENÚ 3 BOTONES)
+        // FLUJO DE PISTAS (NUEVO MENÚ 3 BOTONES Y VOLVER)
         function mostrarOpcionesPista() {
             document.getElementById('botones-apuesta').classList.add('hidden');
             document.getElementById('area-seleccion-pistas').classList.remove('hidden');
             p1.className = p1.className.replace(/border-\w+-\d+/, 'border-red-600');
+        }
+
+        function ocultarOpcionesPista() {
+            document.getElementById('area-seleccion-pistas').classList.add('hidden');
+            document.getElementById('botones-apuesta').classList.remove('hidden');
+            
+            const generoLimpio = limpiarTexto(cancionActual.genero);
+            const colorData = coloresGeneros[generoLimpio] || coloresGeneros["VARIADO"];
+            p1.className = p1.className.replace(/border-red-600/, colorData.borde);
         }
 
         function revelarPistaEspecifica(tipo) {
